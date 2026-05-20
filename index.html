@@ -752,7 +752,7 @@ footer{padding:1.75rem 5%;background:var(--white);border-top:1px solid var(--ink
           <li><span class="pfy">✓</span>Echtzeit Push + Slack</li>
           <li><span class="pfy">✓</span>Audit-Trail + Export</li>
         </ul>
-        <a href="#" id="business-cta" class="pc-btn pcb-forest" data-price-id="prc_monthly-23rm0344" onclick="handleBusinessClick(event)" style="margin-top:auto">14 Tage kostenlos testen</a>
+        <a href="#" id="business-cta" class="pc-btn pcb-forest" data-price-id="prc_pro-monthly-68fj0nlx" onclick="handleBusinessClick(event)" style="margin-top:auto">14 Tage kostenlos testen</a>
       </div>
       <div class="pc r r2" style="display:flex;flex-direction:column">
         <div class="pc-tier">Enterprise</div>
@@ -889,7 +889,7 @@ function setPlan(type){
   if(type === 'monthly'){
     monthly.style.display = 'block';
     annual.style.display = 'none';
-    if(cta) cta.setAttribute('data-price-id', 'prc_monthly-23rm0344');
+    if(cta) cta.setAttribute('data-price-id', 'prc_pro-monthly-68fj0nlx');
     if(btnM) btnM.classList.add('pt-active');
     if(btnA) btnA.classList.remove('pt-active');
   } else {
@@ -1264,7 +1264,7 @@ function handleFeatureClick(tab){
 function handleBusinessClick(e){
   e.preventDefault();
   var btn = document.getElementById('business-cta');
-  var priceId = btn.getAttribute('data-price-id') || 'prc_monthly-23rm0344';
+  var priceId = btn.getAttribute('data-price-id') || 'prc_pro-monthly-68fj0nlx';
 
   console.log('[GuardAI] handleBusinessClick — priceId:', priceId, '| member:', !!_currentMember);
 
