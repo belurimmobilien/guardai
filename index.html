@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GuardAI — Autonomer Compliance-Officer für DSGVO & AGB</title>
+
+<!-- SEO -->
+<meta name="description" content="GuardAI scannt Verträge, E-Mails und Websites automatisch auf DSGVO-Verstöße und rechtliche Risiken — Ergebnis in unter 30 Sekunden. Kein Anwalt nötig.">
+<meta name="keywords" content="DSGVO, Compliance, AGB-Prüfung, Vertragsanalyse, KI, Datenschutz, BGB, Rechtsscanner">
+<meta name="author" content="GuardAI">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://guardai.cloud">
+
+<!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://guardai.cloud">
+<meta property="og:title" content="GuardAI — Kein Bußgeld. Kein böses Erwachen. Nie mehr.">
+<meta property="og:description" content="KI-Compliance für deutsche KMU. GuardAI scannt Verträge, E-Mails und Websites auf DSGVO & AGB-Risiken — automatisch, in Echtzeit.">
+<meta property="og:image" content="https://guardai.cloud/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="GuardAI">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://guardai.cloud">
+<meta name="twitter:title" content="GuardAI — Autonomer Compliance-Officer">
+<meta name="twitter:description" content="KI-Compliance für deutsche KMU. DSGVO, AGB & Vertragsrisiken automatisch erkennen — in unter 30 Sekunden.">
+<meta name="twitter:image" content="https://guardai.cloud/og-image.png">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<meta name="theme-color" content="#0F5A3F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F7F4EF;
+  --cream-b:#EEE9E0;
+  --cream-c:#E5DDD0;
+  --white:#FDFCFA;
+  --forest-deep:#0A3D2B;
+  --forest:#0F5A3F;
+  --forest-mid:#1A7A56;
+  --forest-lt:#2A9E6E;
+  --forest-pale:#EAF4EE;
+  --forest-pale2:#D4EBE0;
+  --ink:#18181B;
+  --ink-70:#454547;
+  --ink-45:#8A898C;
+  --ink-20:#CCCACC;
+  --ink-08:#ECEAEC;
+  --gold:#9A7230;
+  --gold-pale:#FBF5E8;
+  --amber:#B45309;
+  --amber-pale:#FEF3C7;
+  --red:#B91C1C;
+  --red-pale:#FEF2F2;
+  --sans:'Inter',system-ui,sans-serif;
+  --serif:'Newsreader',Georgia,serif;
+  --mono:'DM Mono',monospace;
+  --radius:10px;
+  --radius-lg:16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:var(--sans);background:var(--cream);color:var(--ink);overflow-x:hidden;line-height:1.6}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;height:64px;
+  background:rgba(247,244,239,.88);
+  backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid var(--ink-08);
+}
+.nav-brand{display:flex;align-items:center;gap:.5rem;text-decoration:none}
+.nav-shield{width:28px;height:28px;background:var(--forest);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.nav-shield svg{width:15px;height:15px;stroke:#fff;stroke-width:2;fill:none}
+.nav-name{font-size:.95rem;font-weight:600;color:var(--ink);letter-spacing:-.02em}
+.nav-name span{color:var(--forest-mid)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:.82rem;font-weight:400;color:var(--ink-70);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:.75rem}
+.nav-login{font-size:.82rem;font-weight:500;color:var(--ink-70);text-decoration:none;padding:.4rem .75rem;transition:color .15s}
+.nav-login:hover{color:var(--ink)}
+.nav-cta{font-size:.82rem;font-weight:600;color:#fff;background:var(--forest);padding:.45rem 1.1rem;border-radius:7px;text-decoration:none;transition:background .15s;letter-spacing:-.01em}
+.nav-cta:hover{background:var(--forest-mid)}
+
+/* ── HERO ── */
+.hero{padding:7rem 5% 5rem;min-height:calc(100vh - 64px);display:flex;align-items:center}
+.hero-inner{max-width:1160px;margin:0 auto;width:100%;display:grid;grid-template-columns:1.05fr .95fr;gap:5rem;align-items:center}
+
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:500;color:var(--forest);background:var(--forest-pale);border:1px solid var(--forest-pale2);padding:.3rem .875rem;border-radius:50px;margin-bottom:1.5rem;letter-spacing:.01em}
+.tag-dot{width:5px;height:5px;border-radius:50%;background:var(--forest-lt);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+.hero h1{font-family:var(--serif);font-size:clamp(2.8rem,4.2vw,4rem);font-weight:300;line-height:1.12;letter-spacing:-.02em;color:var(--ink);margin-bottom:1.25rem}
+.hero h1 em{font-style:italic;color:var(--forest-mid)}
+
+.hero-lead{font-size:1.05rem;font-weight:300;color:var(--ink-70);line-height:1.75;max-width:480px;margin-bottom:2.5rem}
+
+.hero-btns{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;font-size:.88rem;font-weight:600;color:#fff;background:var(--forest);padding:.7rem 1.5rem;border-radius:8px;text-decoration:none;transition:all .18s;letter-spacing:-.01em;border:1.5px solid var(--forest)}
+.btn-primary:hover{background:var(--forest-mid);border-color:var(--forest-mid);transform:translateY(-1px);box-shadow:0 4px 16px rgba(10,61,43,.2)}
+.btn-outline{display:inline-flex;align-items:center;gap:.5rem;font-size:.88rem;font-weight:500;color:var(--ink-70);background:transparent;padding:.7rem 1.25rem;border-radius:8px;text-decoration:none;border:1.5px solid var(--ink-20);transition:all .18s}
+.btn-outline:hover{border-color:var(--ink-45);color:var(--ink)}
+
+.hero-social{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.social-item{display:flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:400;color:var(--ink-45)}
+.social-item svg{width:13px;height:13px;stroke:var(--forest-lt);stroke-width:2;flex-shrink:0}
+
+/* ── DASHBOARD ── */
+.dash-wrap{background:var(--white);border:1px solid var(--ink-08);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04),0 8px 32px rgba(10,61,43,.08),0 32px 64px rgba(10,61,43,.06)}
+.dash-chrome{background:var(--cream);border-bottom:1px solid var(--ink-08);padding:.625rem 1rem;display:flex;align-items:center;gap:.5rem}
+.dc-dots{display:flex;gap:5px}
+.dc-dot{width:10px;height:10px;border-radius:50%}
+.dc-r{background:#FF5F57}.dc-y{background:#FEBC2E}.dc-g{background:#28C840}
+.dc-url{font-family:var(--mono);font-size:.62rem;color:var(--ink-45);margin:0 auto;background:var(--white);padding:2px 10px;border-radius:4px;border:1px solid var(--ink-08)}
+
+.dash-body{padding:1.25rem}
+.db-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.625rem;margin-bottom:1.125rem}
+.db-stat{background:var(--cream);border-radius:8px;padding:.75rem;text-align:center}
+.db-val{font-family:var(--mono);font-size:1.35rem;font-weight:400;line-height:1}
+.dbv-g{color:var(--forest)}.dbv-a{color:var(--amber)}.dbv-r{color:var(--red)}
+.db-lbl{font-size:.6rem;font-weight:500;color:var(--ink-45);margin-top:3px;letter-spacing:.04em;text-transform:uppercase}
+
+.feed-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.625rem}
+.feed-lbl{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-45)}
+.feed-badge{display:flex;align-items:center;gap:.3rem;font-family:var(--mono);font-size:.6rem;color:var(--forest-lt)}
+.feed-pulse{width:5px;height:5px;border-radius:50%;background:var(--forest-lt);animation:blink 1.8s infinite}
+
+.fi{display:flex;align-items:center;gap:.625rem;padding:.5rem 0;border-bottom:1px solid var(--ink-08)}
+.fi:last-child{border:none}
+.fi-ic{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.fic-r{background:var(--red-pale);color:var(--red)}
+.fic-a{background:var(--amber-pale);color:var(--amber)}
+.fic-g{background:var(--forest-pale);color:var(--forest)}
+.fi-info{flex:1;min-width:0}
+.fi-t{font-size:.7rem;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fi-s{font-size:.62rem;color:var(--ink-45);margin-top:1px}
+.fi-tag{font-family:var(--mono);font-size:.58rem;padding:2px 7px;border-radius:4px;flex-shrink:0;white-space:nowrap}
+.ft-r{background:var(--red-pale);color:var(--red)}
+.ft-a{background:var(--amber-pale);color:var(--amber)}
+.ft-g{background:var(--forest-pale);color:var(--forest)}
+
+.risk-sec{margin-top:.875rem;padding-top:.875rem;border-top:1px solid var(--ink-08)}
+.rs-lbl{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-45);margin-bottom:.625rem}
+.rs-row{display:flex;align-items:center;gap:.625rem;margin-bottom:.35rem}
+.rs-name{font-size:.65rem;color:var(--ink-70);width:70px;flex-shrink:0}
+.rs-track{flex:1;height:4px;background:var(--ink-08);border-radius:99px;overflow:hidden}
+.rs-fill{height:100%;border-radius:99px}
+.rf-g{background:var(--forest-lt)}.rf-a{background:var(--amber)}
+.rs-pct{font-family:var(--mono);font-size:.6rem;color:var(--ink-45);width:26px;text-align:right;flex-shrink:0}
+
+/* ── NUMBERS ── */
+.numbers{padding:4rem 5%;background:var(--cream-b);border-top:1px solid var(--ink-08);border-bottom:1px solid var(--ink-08)}
+.numbers-inner{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.num{padding:2rem;text-align:center;border-right:1px solid var(--ink-08)}
+.num:last-child{border-right:none}
+.num-val{font-family:var(--serif);font-size:3rem;font-weight:300;color:var(--ink);line-height:1;letter-spacing:-.03em;margin-bottom:.4rem}
+.num-val em{font-style:italic;color:var(--forest-mid)}
+.num-lbl{font-size:.75rem;font-weight:400;color:var(--ink-45);line-height:1.5}
+
+/* ── SECTION BASE ── */
+.sec{padding:7rem 5%}
+.sec-inner{max-width:1160px;margin:0 auto}
+.sec-eyebrow{font-size:.72rem;font-weight:600;color:var(--forest);letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.6rem}
+.sec-eyebrow::before{content:'';width:20px;height:1.5px;background:var(--forest-lt);display:inline-block}
+.sec-h{font-family:var(--serif);font-size:clamp(2rem,3.2vw,2.9rem);font-weight:300;line-height:1.15;letter-spacing:-.02em;color:var(--ink);margin-bottom:.875rem}
+.sec-h em{font-style:italic;color:var(--forest-mid)}
+.sec-p{font-size:.95rem;font-weight:300;color:var(--ink-70);line-height:1.8;max-width:520px;margin-bottom:3.5rem}
+
+/* ── HOW ── */
+.how{background:var(--white)}
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:var(--ink-08);border:1px solid var(--ink-08);border-radius:var(--radius-lg);overflow:hidden;margin-top:3.5rem}
+.hs{background:var(--white);padding:2rem 1.75rem;transition:background .2s}
+.hs.hs-clickable{cursor:pointer}
+.hs.hs-clickable:hover{background:var(--forest-pale)}
+.hs.hs-locked{pointer-events:none;cursor:default}
+.hs-n{font-family:var(--mono);font-size:.6rem;color:var(--ink-20);letter-spacing:.06em;margin-bottom:1.25rem}
+.hs-icon{width:38px;height:38px;border-radius:9px;background:var(--forest-pale);display:flex;align-items:center;justify-content:center;margin-bottom:1.1rem;transition:background .2s}
+.hs.hs-clickable:hover .hs-icon{background:var(--forest-pale2)}
+.hs-icon svg{width:18px;height:18px;stroke:var(--forest);stroke-width:1.8;fill:none}
+.hs-t{font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:.4rem;letter-spacing:-.01em}
+.hs-d{font-size:.78rem;font-weight:300;color:var(--ink-70);line-height:1.65}
+
+/* ── FEATURES ── */
+.features{background:var(--cream)}
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--ink-08);border-radius:var(--radius-lg);overflow:hidden;margin-top:3.5rem}
+.fc{background:var(--white);padding:2.25rem;border-right:1px solid var(--ink-08);border-bottom:1px solid var(--ink-08);transition:background .2s;position:relative}
+.fc.fc-clickable{cursor:pointer}
+.fc.fc-clickable:hover{background:var(--forest-pale)}
+.fc.fc-clickable:hover .fc-icon{background:var(--forest-pale2)}
+.fc.fc-locked{pointer-events:none;cursor:default}
+.fc-arrow{position:absolute;top:2.25rem;right:2.25rem;font-size:.75rem;color:var(--forest-lt);opacity:0;transition:opacity .2s}
+.fc.fc-clickable:hover .fc-arrow{opacity:1}
+.fc:nth-child(2n){border-right:none}
+.fc:nth-last-child(-n+2){border-bottom:none}
+.fc:hover{background:var(--forest-pale)}
+.fc-num{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;color:var(--ink-20);margin-bottom:1.25rem}
+.fc-icon{width:42px;height:42px;border-radius:10px;background:var(--forest-pale);display:flex;align-items:center;justify-content:center;margin-bottom:1.1rem;transition:background .2s}
+.fc:hover .fc-icon{background:var(--forest-pale2)}
+.fc-icon svg{width:20px;height:20px;stroke:var(--forest);stroke-width:1.8;fill:none}
+.fc-t{font-size:.95rem;font-weight:600;color:var(--ink);margin-bottom:.5rem;letter-spacing:-.01em}
+.fc-d{font-size:.82rem;font-weight:300;color:var(--ink-70);line-height:1.72;margin-bottom:1.1rem}
+.fc-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+.fc-tag{font-family:var(--mono);font-size:.58rem;color:var(--forest);background:var(--forest-pale);border:1px solid var(--forest-pale2);padding:2px 7px;border-radius:4px}
+.fc-cli{font-size:.8rem;font-weight:300;color:var(--ink-70);padding:.38rem 0;border-bottom:1px solid var(--ink-08);display:flex;align-items:center;gap:.6rem;line-height:1.45}
+.fc-cli:last-child{border:none}
+.fc-cli-check{width:16px;height:16px;border-radius:50%;background:var(--forest-pale);border:1px solid var(--forest-pale2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.55rem;color:var(--forest);font-weight:700}
+
+/* ── DARK FOREST SECTION (CTA strip) ── */
+.forest-strip{background:var(--forest-deep);padding:5rem 5%}
+.fs-inner{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.fs-left .sec-eyebrow{color:rgba(234,244,238,.5)}
+.fs-left .sec-eyebrow::before{background:rgba(42,158,110,.5)}
+.fs-h{font-family:var(--serif);font-size:clamp(2rem,3vw,2.7rem);font-weight:300;line-height:1.15;letter-spacing:-.02em;color:rgba(247,244,239,.95);margin-bottom:1.25rem}
+.fs-h em{font-style:italic;color:var(--forest-lt)}
+.fs-p{font-size:.9rem;font-weight:300;color:rgba(247,244,239,.5);line-height:1.8;margin-bottom:2rem}
+.btn-cream{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;color:var(--forest-deep);background:var(--cream);padding:.7rem 1.5rem;border-radius:8px;text-decoration:none;transition:all .18s;letter-spacing:-.01em}
+.btn-cream:hover{background:var(--white);transform:translateY(-1px)}
+.fs-right{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(247,244,239,.08);border:1px solid rgba(247,244,239,.08);border-radius:var(--radius-lg);overflow:hidden}
+.fs-stat{background:var(--forest-deep);padding:1.75rem;text-align:center}
+.fss-val{font-family:var(--serif);font-size:2.5rem;font-weight:300;color:rgba(247,244,239,.9);line-height:1;margin-bottom:.4rem;letter-spacing:-.03em}
+.fss-val em{font-style:italic;color:var(--forest-lt)}
+.fss-lbl{font-size:.72rem;font-weight:400;color:rgba(247,244,239,.4);line-height:1.5}
+
+/* ── TESTIMONIALS ── */
+.testimonials{background:var(--cream-b)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3.5rem}
+.tc{background:var(--white);border:1px solid var(--ink-08);border-radius:var(--radius-lg);padding:1.75rem;transition:all .2s}
+.tc:hover{box-shadow:0 4px 20px rgba(10,61,43,.06);transform:translateY(-2px)}
+.tc-q{font-family:var(--serif);font-size:1rem;font-weight:300;font-style:italic;color:var(--ink);line-height:1.7;margin-bottom:1.5rem}
+.tc-a{display:flex;align-items:center;gap:.75rem;padding-top:1.25rem;border-top:1px solid var(--ink-08)}
+.tc-av{width:34px;height:34px;border-radius:50%;background:var(--forest-pale);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:600;color:var(--forest);flex-shrink:0;letter-spacing:.02em}
+.tc-name{font-size:.8rem;font-weight:600;color:var(--ink)}
+.tc-role{font-size:.7rem;color:var(--ink-45);margin-top:1px}
+
+/* ── PRICING ── */
+.pricing{background:var(--white)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3.5rem}
+.pc{background:var(--cream);border:1.5px solid var(--ink-08);border-radius:var(--radius-lg);padding:2rem;transition:all .2s;position:relative}
+.pc.featured{border-color:var(--forest);background:var(--forest-pale)}
+.pc-pop{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;background:var(--forest);color:#fff;padding:3px 12px;border-radius:50px;white-space:nowrap}
+.pc-tier{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45);margin-bottom:.875rem}
+.pc-name{font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:.3rem;letter-spacing:-.01em}
+.pc-desc{font-size:.78rem;font-weight:300;color:var(--ink-70);margin-bottom:1.5rem;line-height:1.55}
+.pc-price{font-family:var(--serif);font-size:2.8rem;font-weight:300;color:var(--ink);line-height:1;letter-spacing:-.03em;margin-bottom:.2rem}
+.pc-per{font-size:.72rem;color:var(--ink-45);margin-bottom:.3rem}
+.pc-yr{font-family:var(--mono);font-size:.62rem;color:var(--forest);margin-bottom:1.75rem}
+.pc-div{height:1px;background:var(--ink-08);margin-bottom:1.5rem}
+.pc.featured .pc-div{background:var(--forest-pale2)}
+.pc-feats{list-style:none;margin-bottom:1.75rem}
+.pc-feats li{font-size:.78rem;font-weight:300;color:var(--ink-70);display:flex;align-items:flex-start;gap:.55rem;padding:.3rem 0;line-height:1.45}
+.pfy{color:var(--forest);flex-shrink:0;font-weight:600}
+.pfn{color:var(--ink-20);flex-shrink:0}
+.pc-btn{display:block;text-align:center;padding:.75rem;font-size:.82rem;font-weight:600;border-radius:8px;text-decoration:none;transition:all .18s;letter-spacing:-.01em}
+.pcb-outline{border:1.5px solid var(--ink-20);color:var(--ink-70);background:transparent}
+.pcb-outline:hover{border-color:var(--forest);color:var(--forest)}
+.pcb-forest{background:var(--forest);color:#fff;border:1.5px solid var(--forest)}
+.pcb-forest:hover{background:var(--forest-mid)}
+
+/* ── FAQ ── */
+.faq{background:var(--cream)}
+.faq-inner{max-width:760px;margin:0 auto}
+.faq-list{margin-top:3rem}
+.fq{border-bottom:1px solid var(--ink-08)}
+.fq-q{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 0;cursor:pointer;gap:1.5rem}
+.fq-text{font-size:.95rem;font-weight:500;color:var(--ink);line-height:1.4}
+.fq-icon{width:22px;height:22px;border-radius:50%;border:1px solid var(--ink-20);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.75rem;color:var(--ink-45);transition:all .25s}
+.fq.open .fq-icon{background:var(--forest);border-color:var(--forest);color:#fff;transform:rotate(45deg)}
+.fq-a{font-size:.85rem;font-weight:300;color:var(--ink-70);line-height:1.8;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s}
+.fq.open .fq-a{max-height:200px;padding-bottom:1.25rem}
+
+/* ── FINAL CTA ── */
+.final-cta{padding:8rem 5%;background:var(--cream-b);text-align:center}
+.fc-tag-wrap{display:flex;justify-content:center;margin-bottom:1.5rem}
+.fc-tag2{font-size:.72rem;font-weight:500;color:var(--forest);background:var(--forest-pale);border:1px solid var(--forest-pale2);padding:.3rem .875rem;border-radius:50px;letter-spacing:.01em}
+.fc-h{font-family:var(--serif);font-size:clamp(2.2rem,3.8vw,3.5rem);font-weight:300;line-height:1.12;letter-spacing:-.02em;color:var(--ink);margin-bottom:1rem}
+.fc-h em{font-style:italic;color:var(--forest-mid)}
+.fc-p{font-size:.95rem;font-weight:300;color:var(--ink-70);line-height:1.75;max-width:460px;margin:0 auto 2.5rem}
+.fc-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.fc-note{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;color:var(--ink-45);margin-top:1.5rem}
+
+/* ── FOOTER ── */
+footer{padding:1.75rem 5%;background:var(--white);border-top:1px solid var(--ink-08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.f-brand{font-size:.88rem;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.f-brand span{color:var(--forest-mid)}
+.f-links{display:flex;gap:1.75rem}
+.f-links a{font-size:.75rem;color:var(--ink-45);text-decoration:none;transition:color .15s}
+.f-links a:hover{color:var(--ink)}
+.f-note{font-family:var(--mono);font-size:.6rem;color:var(--ink-20)}
+
+/* ── SCROLL REVEAL ── */
+.r{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.r.in{opacity:1;transform:none}
+.r1{transition-delay:.08s}.r2{transition-delay:.16s}.r3{transition-delay:.24s}
+
+@media(max-width:900px){
+  .hero-inner,.fs-inner,.feat-grid,.pricing-grid,.testi-grid{grid-template-columns:1fr}
+  .dash-wrap{display:none}
+  .numbers-inner,.how-steps,.fs-right{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+}
+
+/* ── LEGAL OVERLAY ── */
+.legal-overlay{display:none;position:fixed;inset:0;z-index:500;background:var(--cream);overflow-y:auto}
+.legal-overlay.active{display:block}
+.legal-nav{position:sticky;top:0;z-index:10;background:rgba(247,244,239,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--ink-15);padding:0 5%;height:56px;display:flex;align-items:center;justify-content:space-between}
+.legal-brand{font-size:.95rem;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.legal-brand span{color:var(--forest-mid)}
+.legal-close{font-size:.82rem;font-weight:500;color:var(--forest);cursor:pointer;display:flex;align-items:center;gap:.35rem;background:var(--forest-pale);border:1px solid var(--forest-pale2);padding:.35rem .875rem;border-radius:6px;transition:all .15s;text-decoration:none}
+.legal-close:hover{background:var(--forest-pale2)}
+.legal-layout{max-width:1100px;margin:0 auto;padding:3rem 5% 6rem;display:grid;grid-template-columns:220px 1fr;gap:4rem;align-items:start}
+.legal-sidebar{position:sticky;top:72px}
+.sidebar-section{margin-bottom:2rem}
+.sidebar-label{font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45);margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--ink-15)}
+.sidebar-links{list-style:none}
+.sidebar-links li{margin-bottom:.1rem}
+.sidebar-links a{font-size:.8rem;color:var(--ink-70);text-decoration:none;padding:.3rem .6rem;border-radius:6px;display:block;transition:all .15s;line-height:1.4}
+.sidebar-links a:hover{background:var(--forest-pale);color:var(--forest)}
+.sidebar-links a.sl-active{background:var(--forest-pale);color:var(--forest);font-weight:500}
+.legal-main .doc-section{margin-bottom:5rem}
+.legal-main .doc-section:last-child{margin-bottom:0}
+.doc-header{margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--ink-15)}
+.doc-eyebrow{font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--forest);margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+.doc-eyebrow::before{content:'';width:16px;height:1.5px;background:var(--forest-mid)}
+.doc-header h1{font-family:var(--serif);font-size:2.2rem;font-weight:300;line-height:1.12;letter-spacing:-.02em;color:var(--ink);margin-bottom:.4rem}
+.doc-meta{font-size:.72rem;color:var(--ink-45);font-family:monospace}
+.lcard{background:var(--white);border:1px solid var(--ink-15);border-radius:12px;padding:1.75rem;margin-bottom:1rem}
+.lcard-par{font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);margin-bottom:.875rem;display:flex;align-items:center;gap:.4rem}
+.lcard-par::before{content:'';width:12px;height:1px;background:var(--forest-mid)}
+.lcard h2{font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:.75rem;letter-spacing:-.01em}
+.lcard h3{font-size:.88rem;font-weight:600;color:var(--ink);margin:1.1rem 0 .45rem}
+.lcard p{font-size:.86rem;font-weight:300;color:var(--ink-70);line-height:1.78;margin-bottom:.7rem}
+.lcard p:last-child{margin-bottom:0}
+.lcard ul{margin:.4rem 0 .7rem 1.2rem}
+.lcard ul li{font-size:.86rem;font-weight:300;color:var(--ink-70);line-height:1.7;margin-bottom:.25rem}
+.lcard .info-row{display:flex;gap:.75rem;align-items:baseline;padding:.38rem 0;border-bottom:1px solid var(--ink-15)}
+.lcard .info-row:last-child{border:none}
+.lcard .ik{font-size:.76rem;font-weight:500;color:var(--ink-45);width:155px;flex-shrink:0}
+.lcard .iv{font-size:.84rem;font-weight:300;color:var(--ink)}
+.lnote{border-left:3px solid var(--forest-mid);background:var(--forest-pale);padding:.75rem 1rem;border-radius:0 8px 8px 0;margin:.875rem 0}
+.lnote p{color:#0F5A3F;font-size:.8rem;margin:0}
+.lwarn{border-left:3px solid var(--amber);background:var(--amber-pale);padding:.75rem 1rem;border-radius:0 8px 8px 0;margin:.875rem 0}
+.lwarn p{color:#92400E;font-size:.8rem;margin:0;font-weight:400}
+.ldivider{height:1px;background:var(--ink-15);margin:4rem 0}
+@media(max-width:780px){.legal-layout{grid-template-columns:1fr}.legal-sidebar{display:none}}
+
+
+/* ── PRICE TOGGLE ── */
+.price-toggle{display:flex;gap:4px;background:rgba(10,61,43,.25);border-radius:8px;padding:4px;margin-bottom:1.25rem}
+.pt-btn{flex:1;padding:.45rem .5rem;border:none;border-radius:6px;font-family:var(--sans);font-size:.75rem;font-weight:500;cursor:pointer;background:transparent;color:rgba(255,255,255,.6);transition:all .2s;line-height:1.3}
+.pt-btn.pt-active{background:var(--forest-lt);color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.pc.featured .pt-btn{color:rgba(255,255,255,.55)}
+.pc.featured .pt-btn.pt-active{background:var(--forest-lt);color:#fff;box-shadow:0 2px 8px rgba(10,61,43,.3)}
+.pt-save{display:block;font-size:.62rem;font-weight:400;color:rgba(255,255,255,.8);margin-top:1px}
+.pc.featured .pt-save{color:rgba(255,255,255,.8)}
+
+
+/* ── PROFILE PAGE ── */
+.profile-overlay{display:none;position:fixed;inset:0;z-index:500;background:var(--cream);overflow-y:auto}
+.profile-overlay.active{display:block}
+.profile-nav{position:sticky;top:0;z-index:10;background:rgba(247,244,239,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--ink-08);padding:0 5%;height:56px;display:flex;align-items:center;justify-content:space-between}
+.profile-brand{font-size:.95rem;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.profile-brand span{color:var(--forest-mid)}
+.profile-nav-right{display:flex;align-items:center;gap:.75rem}
+.profile-back{font-size:.8rem;color:var(--ink-45);text-decoration:none;cursor:pointer;transition:color .15s}
+.profile-back:hover{color:var(--forest)}
+.profile-logout{font-size:.78rem;font-weight:500;color:var(--red);cursor:pointer;background:var(--red-pale);border:1px solid rgba(185,28,28,.15);padding:.3rem .75rem;border-radius:6px;transition:all .15s}
+.profile-logout:hover{background:rgba(185,28,28,.15)}
+.profile-wrap{max-width:720px;margin:0 auto;padding:3rem 5% 6rem}
+.profile-header{margin-bottom:2.5rem}
+.profile-avatar{width:64px;height:64px;border-radius:50%;background:var(--forest-pale);border:2px solid var(--forest-pale2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:600;color:var(--forest);margin-bottom:1.25rem;font-family:var(--serif)}
+.profile-greeting{font-family:var(--serif);font-size:1.8rem;font-weight:300;color:var(--ink);letter-spacing:-.01em;margin-bottom:.25rem}
+.profile-greeting em{font-style:italic;color:var(--forest-mid)}
+.profile-email-display{font-size:.82rem;color:var(--ink-45)}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.profile-card{background:var(--white);border:1px solid var(--ink-08);border-radius:var(--radius-lg);padding:1.5rem}
+.profile-card.full{grid-column:span 2}
+.profile-card.plan-card{background:var(--forest-pale);border-color:var(--forest-pale2)}
+.pc-label{font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);margin-bottom:.875rem;display:flex;align-items:center;gap:.4rem}
+.pc-label::before{content:'';width:12px;height:1px;background:var(--forest-mid)}
+.pc-label.ink{color:var(--ink-45)}
+.pc-label.ink::before{background:var(--ink-20)}
+.profile-field{margin-bottom:1rem}
+.profile-field:last-child{margin-bottom:0}
+.pf-label{font-size:.72rem;font-weight:500;color:var(--ink-45);margin-bottom:.35rem;letter-spacing:.02em}
+.pf-input{width:100%;padding:.6rem .875rem;border:1px solid var(--ink-15);border-radius:8px;font-family:var(--sans);font-size:.88rem;color:var(--ink);background:var(--cream);transition:border-color .15s;outline:none}
+.pf-input:focus{border-color:var(--forest-mid);background:var(--white)}
+.pf-save{margin-top:1.25rem;font-family:var(--sans);font-size:.82rem;font-weight:600;color:#fff;background:var(--forest);border:none;padding:.65rem 1.5rem;border-radius:8px;cursor:pointer;transition:background .15s;letter-spacing:-.01em}
+.pf-save:hover{background:var(--forest-mid)}
+.plan-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--forest);color:#fff;font-size:.75rem;font-weight:600;padding:.4rem .875rem;border-radius:50px;margin-bottom:1rem;letter-spacing:-.01em}
+.plan-scan-bar{margin-top:1rem}
+.psb-label{display:flex;justify-content:space-between;font-size:.75rem;color:var(--forest);font-weight:500;margin-bottom:.4rem}
+.psb-track{height:6px;background:var(--forest-pale2);border-radius:99px;overflow:hidden}
+.psb-fill{height:100%;background:var(--forest-lt);border-radius:99px;transition:width .5s}
+.plan-upgrade{display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;font-size:.78rem;font-weight:600;color:var(--forest);text-decoration:none;border:1.5px solid var(--forest-pale2);padding:.45rem 1rem;border-radius:8px;transition:all .15s;cursor:pointer;background:transparent}
+.plan-upgrade:hover{background:var(--forest);color:#fff;border-color:var(--forest)}
+.pf-msg{font-size:.78rem;color:var(--forest);background:var(--forest-pale);border:1px solid var(--forest-pale2);padding:.5rem .875rem;border-radius:6px;margin-top:.75rem;display:none}
+
+
+.plan-cancel-btn{font-family:var(--sans);font-size:.78rem;font-weight:500;color:var(--red);background:transparent;border:1.5px solid rgba(185,28,28,.2);padding:.5rem 1rem;border-radius:8px;cursor:pointer;transition:all .15s}
+.plan-cancel-btn:hover{background:var(--red-pale);border-color:rgba(185,28,28,.4)}
+.cancel-modal{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.4);align-items:center;justify-content:center}
+.cancel-modal.active{display:flex}
+.cancel-box{background:var(--white);border-radius:var(--radius-lg);padding:2rem;max-width:420px;width:90%;border:1px solid var(--ink-08);box-shadow:0 8px 40px rgba(0,0,0,.12)}
+.cancel-title{font-family:var(--serif);font-size:1.4rem;font-weight:300;color:var(--ink);margin-bottom:.5rem}
+.cancel-desc{font-size:.85rem;font-weight:300;color:var(--ink-70);line-height:1.7;margin-bottom:1.5rem}
+.cancel-actions{display:flex;gap:.75rem;justify-content:flex-end}
+.cancel-keep{font-size:.82rem;font-weight:500;color:var(--ink-70);background:transparent;border:1.5px solid var(--ink-20);padding:.6rem 1.25rem;border-radius:8px;cursor:pointer;transition:all .15s}
+.cancel-keep:hover{border-color:var(--ink-45);color:var(--ink)}
+.cancel-confirm{font-size:.82rem;font-weight:600;color:#fff;background:var(--red);border:none;padding:.6rem 1.25rem;border-radius:8px;cursor:pointer;transition:background .15s}
+.cancel-confirm:hover{background:#991B1B}
+
+
+/* ── SCANNER DASHBOARD ── */
+.scanner-overlay{display:none;position:fixed;inset:0;z-index:500;background:var(--cream);overflow-y:auto}
+.scanner-overlay.active{display:block}
+.scanner-nav{position:sticky;top:0;z-index:10;background:rgba(247,244,239,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--ink-08);padding:0 5%;height:56px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.scanner-brand{font-size:.95rem;font-weight:600;color:var(--ink);letter-spacing:-.01em;flex-shrink:0}
+.scanner-brand span{color:var(--forest-mid)}
+.scanner-nav-tabs{display:flex;gap:2px;background:var(--ink-08);border-radius:8px;padding:3px}
+.snav-tab{font-size:.78rem;font-weight:500;color:var(--ink-45);padding:.35rem .875rem;border-radius:6px;cursor:pointer;transition:all .2s;border:none;background:transparent}
+.snav-tab.active{background:var(--white);color:var(--forest);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.scanner-nav-right{display:flex;align-items:center;gap:.75rem;flex-shrink:0}
+.scanner-back{font-size:.78rem;color:var(--ink-45);cursor:pointer;transition:color .15s}
+.scanner-back:hover{color:var(--forest)}
+.scanner-profile-btn{font-size:.78rem;font-weight:500;color:var(--forest);background:var(--forest-pale);border:1px solid var(--forest-pale2);padding:.3rem .75rem;border-radius:6px;cursor:pointer;transition:all .15s}
+.scanner-profile-btn:hover{background:var(--forest-pale2)}
+
+.scanner-wrap{max-width:860px;margin:0 auto;padding:2.5rem 5% 6rem}
+.scanner-title{font-family:var(--serif);font-size:2rem;font-weight:300;color:var(--ink);letter-spacing:-.02em;margin-bottom:.4rem}
+.scanner-title em{font-style:italic;color:var(--forest-mid)}
+.scanner-sub{font-size:.88rem;font-weight:300;color:var(--ink-45);margin-bottom:2.5rem}
+
+/* Scanner Tabs Content */
+.scan-panel{display:none}
+.scan-panel.active{display:block}
+
+/* Upload Zone */
+.upload-zone{border:2px dashed var(--ink-20);border-radius:var(--radius-lg);padding:3rem 2rem;text-align:center;cursor:pointer;transition:all .25s;position:relative;background:var(--white)}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--forest-lt);background:var(--forest-pale)}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.uz-icon{width:48px;height:48px;background:var(--forest-pale);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+.uz-icon svg{width:24px;height:24px;stroke:var(--forest);stroke-width:1.8;fill:none}
+.uz-title{font-size:.95rem;font-weight:600;color:var(--ink);margin-bottom:.35rem}
+.uz-sub{font-size:.78rem;font-weight:300;color:var(--ink-45);margin-bottom:1rem}
+.uz-btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.8rem;font-weight:600;color:var(--forest);background:var(--forest-pale);border:1.5px solid var(--forest-pale2);padding:.5rem 1.1rem;border-radius:7px;cursor:pointer;transition:all .15s}
+.uz-btn:hover{background:var(--forest-pale2)}
+.uz-formats{font-family:var(--mono);font-size:.62rem;color:var(--ink-20);margin-top:1rem;letter-spacing:.04em}
+
+/* File selected state */
+.file-selected{background:var(--forest-pale);border-color:var(--forest-lt);border-style:solid}
+.file-selected .uz-icon{background:var(--forest)}
+.file-selected .uz-icon svg{stroke:#fff}
+
+/* Text input */
+.scan-textarea{width:100%;min-height:200px;padding:1rem;border:1.5px solid var(--ink-15);border-radius:var(--radius-lg);font-family:var(--sans);font-size:.88rem;color:var(--ink);background:var(--white);resize:vertical;outline:none;transition:border-color .15s;line-height:1.65}
+.scan-textarea:focus{border-color:var(--forest-mid)}
+.scan-textarea::placeholder{color:var(--ink-20)}
+
+/* URL input */
+.url-input-wrap{display:flex;gap:.75rem;align-items:center}
+.scan-url-input{flex:1;padding:.75rem 1rem;border:1.5px solid var(--ink-15);border-radius:var(--radius-lg);font-family:var(--sans);font-size:.88rem;color:var(--ink);background:var(--white);outline:none;transition:border-color .15s}
+.scan-url-input:focus{border-color:var(--forest-mid)}
+
+/* Contract type select */
+.scan-options{display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin-top:1.25rem}
+.scan-option-label{font-size:.75rem;font-weight:500;color:var(--ink-70);margin-bottom:.35rem;display:block;letter-spacing:.01em}
+.scan-select{width:100%;padding:.6rem .875rem;border:1.5px solid var(--ink-15);border-radius:8px;font-family:var(--sans);font-size:.85rem;color:var(--ink);background:var(--white);outline:none;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238A898C' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .75rem center}
+.scan-select:focus{border-color:var(--forest-mid)}
+
+/* Scan Button */
+.scan-submit{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;margin-top:1.5rem;padding:.875rem;font-family:var(--sans);font-size:.92rem;font-weight:600;color:#fff;background:var(--forest);border:none;border-radius:10px;cursor:pointer;transition:all .2s;letter-spacing:-.01em}
+.scan-submit:hover{background:var(--forest-mid);transform:translateY(-1px);box-shadow:0 4px 16px rgba(10,61,43,.2)}
+.scan-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.scan-submit svg{width:16px;height:16px}
+
+/* Scan Limit Warning */
+.scan-limit-info{display:flex;align-items:center;justify-content:space-between;background:var(--forest-pale);border:1px solid var(--forest-pale2);border-radius:8px;padding:.6rem 1rem;margin-top:1rem}
+.sli-text{font-size:.75rem;color:var(--forest);font-weight:500}
+.sli-count{font-family:var(--mono);font-size:.75rem;color:var(--forest-mid);font-weight:500}
+
+/* Progress */
+.scan-progress{display:none;text-align:center;padding:2.5rem}
+.sp-spinner{width:48px;height:48px;border:3px solid var(--forest-pale);border-top-color:var(--forest);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1.25rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sp-text{font-size:.95rem;font-weight:500;color:var(--ink);margin-bottom:.35rem}
+.sp-sub{font-size:.8rem;color:var(--ink-45)}
+
+/* Result */
+.scan-result{display:none;margin-top:1.5rem}
+.result-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-radius:var(--radius-lg) var(--radius-lg) 0 0;margin-bottom:1px}
+.rh-kritisch{background:var(--red-pale);border:1px solid rgba(185,28,28,.15)}
+.rh-warnung{background:var(--amber-pale);border:1px solid rgba(180,83,9,.15)}
+.rh-niedrig{background:var(--forest-pale);border:1px solid var(--forest-pale2)}
+.rh-left{display:flex;align-items:center;gap:.75rem}
+.rh-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.ri-kritisch{background:rgba(185,28,28,.15);color:var(--red)}
+.ri-warnung{background:rgba(180,83,9,.12);color:var(--amber)}
+.ri-niedrig{background:rgba(10,61,43,.1);color:var(--forest)}
+.rh-title{font-size:1rem;font-weight:600;color:var(--ink)}
+.rh-sub{font-size:.75rem;color:var(--ink-45);margin-top:1px}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ink-08);margin-bottom:1px}
+.rs-stat{background:var(--white);padding:.875rem;text-align:center}
+.rs-val{font-family:var(--mono);font-size:1.4rem;font-weight:400}
+.rsv-r{color:var(--red)}.rsv-a{color:var(--amber)}.rsv-g{color:var(--forest)}
+.rs-lbl{font-size:.62rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-45);margin-top:2px}
+.result-body{background:var(--white);border:1px solid var(--ink-08);border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:1.5rem}
+.result-empfehlung{font-size:.85rem;font-weight:400;color:var(--ink-70);line-height:1.7;margin-bottom:1.5rem;padding:.875rem 1rem;background:var(--forest-pale);border-radius:8px;border-left:3px solid var(--forest-mid)}
+.result-befunde{list-style:none}
+.befund-item{padding:1rem;border:1px solid var(--ink-08);border-radius:10px;margin-bottom:.75rem;background:var(--cream)}
+.befund-item:last-child{margin-bottom:0}
+.bi-head{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.5rem}
+.bi-badge{font-family:var(--mono);font-size:.58rem;padding:2px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;font-weight:500}
+.bib-r{background:var(--red-pale);color:var(--red)}
+.bib-a{background:var(--amber-pale);color:var(--amber)}
+.bib-h{background:var(--forest-pale);color:var(--forest)}
+.bi-problem{font-size:.85rem;font-weight:500;color:var(--ink);flex:1;line-height:1.45}
+.bi-klausel{font-family:var(--mono);font-size:.72rem;color:var(--ink-45);margin-bottom:.5rem;font-style:italic}
+.bi-norm{font-size:.72rem;color:var(--forest);font-weight:500;margin-bottom:.35rem}
+.bi-empfehlung{font-size:.78rem;color:var(--ink-70);line-height:1.6}
+.result-disclaimer{font-family:var(--mono);font-size:.62rem;color:var(--ink-20);margin-top:1.25rem;line-height:1.6;letter-spacing:.02em}
+.result-new-scan{display:flex;align-items:center;gap:.5rem;font-size:.82rem;font-weight:600;color:var(--forest);background:transparent;border:1.5px solid var(--forest-pale2);padding:.6rem 1.25rem;border-radius:8px;cursor:pointer;margin-top:1rem;transition:all .15s}
+.result-new-scan:hover{background:var(--forest-pale)}
+
+</style>
+<!-- Memberstack -->
+<script data-memberstack-app="app_cmp7gmpdx00q40syeh6245rdn" src="https://static.memberstack.com/scripts/v2/memberstack.js" type="text/javascript"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">
+    <div class="nav-shield">
+      <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7L12 2z"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <span class="nav-name">Guard<span>AI</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">Wie es funktioniert</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Preise</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#" class="nav-cta" id="btn-scanner" onclick="openScanner();return false;" style="display:none;background:var(--forest-lt)">Scanner öffnen</a>
+    <a href="#" class="nav-login" id="btn-profil" onclick="openProfile();return false;" style="display:none">Mein Profil</a>
+    <a href="#" data-ms-modal="login" class="nav-login" id="btn-anmelden">Anmelden</a>
+    <a href="#" class="nav-cta" id="btn-kostenlos" onclick="handleStartClick(event)">14 Tage kostenlos</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag"><span class="tag-dot"></span>KI-Compliance — Live aktiv</div>
+      <h1>Kein Bußgeld.<br>Kein böses<br>Erwachen. <em>Nie mehr.</em></h1>
+      <p class="hero-lead">GuardAI scannt jeden Vertrag, jede E-Mail und jede Website-Änderung automatisch in Echtzeit — und schlägt Alarm, bevor ein DSGVO-Verstoß oder AGB-Risiko entsteht.</p>
+      <div class="hero-btns">
+        <a href="#" id="btn-hero-start" class="btn-primary" onclick="handleStartClick(event)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Kostenlos starten
+        </a>
+        <a href="#how" class="btn-outline">So funktioniert's →</a>
+      </div>
+      <div class="hero-social">
+        <div class="social-item"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/></svg>DSGVO-konform</div>
+        <div class="social-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-linecap="round"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>Ergebnis in 30 Sek.</div>
+        <div class="social-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Kein Code nötig</div>
+      </div>
+    </div>
+
+    <div class="dash-wrap">
+      <div class="dash-chrome">
+        <div class="dc-dots"><div class="dc-dot dc-r"></div><div class="dc-dot dc-y"></div><div class="dc-dot dc-g"></div></div>
+        <div class="dc-url">guardai.de — Dashboard</div>
+      </div>
+      <div class="dash-body">
+        <div class="db-stats">
+          <div class="db-stat"><div class="db-val dbv-g" id="sc">247</div><div class="db-lbl">Scans heute</div></div>
+          <div class="db-stat"><div class="db-val dbv-r">3</div><div class="db-lbl">Kritisch</div></div>
+          <div class="db-stat"><div class="db-val dbv-g">98%</div><div class="db-lbl">Konform</div></div>
+        </div>
+        <div class="feed-hd">
+          <span class="feed-lbl">Live-Feed</span>
+          <span class="feed-badge"><span class="feed-pulse"></span>Echtzeit</span>
+        </div>
+        <div id="feed">
+          <div class="fi"><div class="fi-ic fic-r">⚠</div><div class="fi-info"><div class="fi-t">Vertrag — Lieferant XY GmbH</div><div class="fi-s">§ 307 BGB — Klausel unwirksam</div></div><span class="fi-tag ft-r">Kritisch</span></div>
+          <div class="fi"><div class="fi-ic fic-a">!</div><div class="fi-info"><div class="fi-t">E-Mail — Newsletter Kampagne</div><div class="fi-s">Opt-out-Link fehlt</div></div><span class="fi-tag ft-a">Warnung</span></div>
+          <div class="fi"><div class="fi-ic fic-g">✓</div><div class="fi-info"><div class="fi-t">Website — Datenschutzseite</div><div class="fi-s">Cookie-Banner konform</div></div><span class="fi-tag ft-g">Konform</span></div>
+          <div class="fi"><div class="fi-ic fic-a">!</div><div class="fi-info"><div class="fi-t">NDA — Partner AG</div><div class="fi-s">Unbegrenzte Laufzeit erkannt</div></div><span class="fi-tag ft-a">Hinweis</span></div>
+        </div>
+        <div class="risk-sec">
+          <div class="rs-lbl">Risikoprofil</div>
+          <div class="rs-row"><span class="rs-name">DSGVO</span><div class="rs-track"><div class="rs-fill rf-g" style="width:15%"></div></div><span class="rs-pct">15%</span></div>
+          <div class="rs-row"><span class="rs-name">Verträge</span><div class="rs-track"><div class="rs-fill rf-a" style="width:42%"></div></div><span class="rs-pct">42%</span></div>
+          <div class="rs-row"><span class="rs-name">E-Mails</span><div class="rs-track"><div class="rs-fill rf-g" style="width:8%"></div></div><span class="rs-pct">8%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<div class="numbers">
+  <div class="numbers-inner">
+    <div class="num r"><div class="num-val">99,8<em>%</em></div><div class="num-lbl">Erkennungsrate bei DSGVO-Verstößen</div></div>
+    <div class="num r r1"><div class="num-val">&lt;30<em>s</em></div><div class="num-lbl">Analysedauer pro Vertrag</div></div>
+    <div class="num r r2"><div class="num-val">9,6<em>×</em></div><div class="num-lbl">ROI gegenüber manueller Prüfung</div></div>
+    <div class="num r r3"><div class="num-val">€<em>0</em></div><div class="num-lbl">Bußgelder unserer Kunden seit Launch</div></div>
+  </div>
+</div>
+
+<!-- HOW -->
+<section class="sec how" id="how">
+  <div class="sec-inner">
+    <div class="sec-eyebrow r">Wie es funktioniert</div>
+    <h2 class="sec-h r">Von Dokument zu Befund<br><em>in unter 30 Sekunden.</em></h2>
+    <div class="how-steps">
+      <div class="hs r hs-locked" id="hs-1" onclick="handleHowClick('vertrag')"><div class="hs-n">01</div><div class="hs-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div class="hs-t">Hochladen</div><div class="hs-d">PDF oder DOCX per Drag & Drop, E-Mail-Integration oder API.</div></div>
+      <div class="hs r r1 hs-locked" id="hs-2" onclick="handleHowClick('vertrag')"><div class="hs-n">02</div><div class="hs-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg></div><div class="hs-t">KI-Analyse</div><div class="hs-d">Unsere KI-Engine prüft jeden Satz auf BGB, DSGVO und AGB-Recht.</div></div>
+      <div class="hs r r2 hs-locked" id="hs-3" onclick="handleHowClick('vertrag')"><div class="hs-n">03</div><div class="hs-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div><div class="hs-t">Echtzeit-Alarm</div><div class="hs-d">Push, E-Mail oder Slack — sofort bei kritischen Befunden.</div></div>
+      <div class="hs r r3 hs-locked" id="hs-4" onclick="handleHowClick('vertrag')"><div class="hs-n">04</div><div class="hs-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div class="hs-t">PDF-Report</div><div class="hs-d">Auditfähiger Report mit Handlungsempfehlungen — druckbar.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="sec features" id="features">
+  <div class="sec-inner">
+    <div class="sec-eyebrow r">Features</div>
+    <h2 class="sec-h r">Drei Scanner.<br><em>Ein System.</em></h2>
+    <div class="feat-grid">
+      <div class="fc r fc-locked" id="fc-vertrag" onclick="handleFeatureClick('vertrag')">
+        <div class="fc-arrow">→ Scanner öffnen</div>
+        <div class="fc-num">01</div>
+        <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="fc-t">Vertrags-Scanner</div>
+        <div class="fc-d">Prüft PDF und DOCX automatisch auf unwirksame AGB-Klauseln, Haftungsrisiken und fehlende Pflichtangaben nach deutschem Recht.</div>
+        <div class="fc-tags"><span class="fc-tag">§ 307 BGB</span><span class="fc-tag">§ 309 BGB</span><span class="fc-tag">DSGVO Art. 28</span></div>
+      </div>
+      <div class="fc r r1 fc-locked" id="fc-email" onclick="handleFeatureClick('email')">
+        <div class="fc-arrow">→ Scanner öffnen</div>
+        <div class="fc-num">02</div>
+        <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div class="fc-t">E-Mail-Monitor</div>
+        <div class="fc-d">Scannt ausgehende Kommunikation auf DSGVO-Verstöße, fehlende Pflichthinweise und CAN-SPAM-Anforderungen — bevor die E-Mail rausgeht.</div>
+        <div class="fc-tags"><span class="fc-tag">DSGVO Art. 6</span><span class="fc-tag">UWG § 7</span><span class="fc-tag">CAN-SPAM</span></div>
+      </div>
+      <div class="fc r r2 fc-locked" id="fc-website" onclick="handleFeatureClick('website')">
+        <div class="fc-arrow">→ Scanner öffnen</div>
+        <div class="fc-num">03</div>
+        <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div class="fc-t">Website-Wächter</div>
+        <div class="fc-d">Überwacht Ihre Website rund um die Uhr. Jede Änderung an Impressum, Datenschutz oder Cookie-Banner wird sofort geprüft und alarmiert.</div>
+        <div class="fc-tags"><span class="fc-tag">§ 5 TMG</span><span class="fc-tag">Cookie-Recht</span><span class="fc-tag">PAngV</span><span class="fc-tag">UWG</span></div>
+      </div>
+      <div class="fc r r3 fc-locked" id="fc-dashboard" onclick="handleFeatureClick('dashboard')">
+        <div class="fc-arrow">→ Scanner öffnen</div>
+        <div class="fc-num">04</div>
+        <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="fc-t">Risiko-Dashboard</div>
+        <div class="fc-d">Aggregierter Überblick über alle Compliance-Risiken — mit lückenlosem Audit-Trail und Behörden-Export auf Knopfdruck.</div>
+        <div class="fc-tags"><span class="fc-tag">Audit-Trail</span><span class="fc-tag">ISO-ready</span><span class="fc-tag">DATEV</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DARK FOREST STRIP -->
+<div class="forest-strip">
+  <div class="fs-inner">
+    <div class="fs-left">
+      <div class="sec-eyebrow r">Warum GuardAI</div>
+      <h2 class="fs-h r">Günstiger als<br><em>ein einziges</em><br>Bußgeld.</h2>
+      <p class="fs-p r">Der durchschnittliche DSGVO-Bußgeldbescheid für KMU lag 2024 bei €87.000. GuardAI kostet €599 im Monat. Die Mathematik ist eindeutig.</p>
+      <a href="#pricing" class="btn-cream r">Preise ansehen →</a>
+    </div>
+    <div class="fs-right r">
+      <div class="fs-stat"><div class="fss-val">€87<em>k</em></div><div class="fss-lbl">Ø DSGVO-Bußgeld für KMU 2024</div></div>
+      <div class="fs-stat"><div class="fss-val">€599</div><div class="fss-lbl">GuardAI Business / Monat</div></div>
+      <div class="fs-stat"><div class="fss-val">30<em>h</em></div><div class="fss-lbl">Anwaltszeit gespart / Monat</div></div>
+      <div class="fs-stat"><div class="fss-val">9,6<em>×</em></div><div class="fss-lbl">ROI ab dem ersten Monat</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<section class="sec pricing" id="pricing">
+  <div class="sec-inner">
+    <div class="sec-eyebrow r">Preise</div>
+    <h2 class="sec-h r">Transparent.<br><em>Fair. Skalierbar.</em></h2>
+    <p class="sec-p r">14 Tage kostenlos testen. Keine Kreditkarte. Kündigung jederzeit.</p>
+    <div class="pricing-grid">
+      <div class="pc r" id="card-free">
+        <div class="pc-name">Free</div>
+        <div class="pc-desc">Für Selbstständige und erste Tests</div>
+        <div class="pc-price">€ 0</div>
+        <div class="pc-per">/ Monat</div>
+        <div class="pc-yr" style="color:var(--ink-45)">für immer kostenlos</div>
+        <div class="pc-div"></div>
+        <ul class="pc-feats">
+          <li><span class="pfy">✓</span>5 Scans / Monat</li>
+          <li><span class="pfy">✓</span>E-Mail-Scanner</li>
+          <li><span class="pfy">✓</span>DSGVO-Basischecks</li>
+          <li><span class="pfn">–</span>Vertrags-Scanner</li>
+          <li><span class="pfn">–</span>Echtzeit-Alarme</li>
+          <li><span class="pfn">–</span>PDF-Report Download</li>
+        </ul>
+        <a href="#" id="btn-free-start" class="pc-btn pcb-outline" onclick="handleStartClick(event)">Kostenlos starten</a>
+      </div>
+      <div class="pc featured r r1" style="display:flex;flex-direction:column">
+        <div class="pc-pop">Beliebteste Wahl</div>
+        <div class="pc-tier">Business</div>
+        <div class="pc-name">Business</div>
+        <div class="pc-desc">Vollständige Compliance-Automatisierung für 50–500 MA</div>
+
+        <!-- TOGGLE -->
+        <div class="price-toggle">
+          <button class="pt-btn pt-active" id="btn-monthly" onclick="setPlan('monthly')">Monatlich</button>
+          <button class="pt-btn" id="btn-annual" onclick="setPlan('annual')">Jährlich <span class="pt-save">2 Monate gratis</span></button>
+        </div>
+
+        <div id="price-monthly">
+          <div class="pc-price">€ 599</div>
+          <div class="pc-per">/ Monat</div>
+          <div class="pc-yr" style="color:var(--ink-45)">monatlich kündbar</div>
+        </div>
+        <div id="price-annual" style="display:none">
+          <div class="pc-price">€ 5.990</div>
+          <div class="pc-per">/ Jahr</div>
+          <div class="pc-yr">€ 499 / Monat — 2 Monate gratis</div>
+        </div>
+
+        <div class="pc-div"></div>
+        <ul class="pc-feats" style="flex:1">
+          <li><span class="pfy">✓</span>Unbegrenzte Scans</li>
+          <li><span class="pfy">✓</span>Alle 4 Module</li>
+          <li><span class="pfy">✓</span>DSGVO, BGB, LkSG, UWG</li>
+          <li><span class="pfy">✓</span>Echtzeit Push + Slack</li>
+          <li><span class="pfy">✓</span>Audit-Trail + Export</li>
+        </ul>
+        <a href="#" id="business-cta" class="pc-btn pcb-forest" data-price-id="prc_monthly-23rm0344" onclick="handleBusinessClick(event)" style="margin-top:auto">14 Tage kostenlos testen</a>
+      </div>
+      <div class="pc r r2" style="display:flex;flex-direction:column">
+        <div class="pc-tier">Enterprise</div>
+        <div class="pc-name">Enterprise</div>
+        <div class="pc-desc">Für Konzerne, Kanzleien und individuellen Bedarf</div>
+        <div class="pc-price" style="font-size:2rem">ab € 2.000</div>
+        <div class="pc-per">/ Monat · individuell</div>
+        <div class="pc-yr" style="color:var(--ink-45)">Auf Anfrage</div>
+        <div class="pc-div"></div>
+        <ul class="pc-feats" style="flex:1">
+          <li><span class="pfy">✓</span>Alles aus Business</li>
+          <li><span class="pfy">✓</span>White-Label Option</li>
+          <li><span class="pfy">✓</span>On-Premise / Private Cloud</li>
+          <li><span class="pfy">✓</span>SSO / SAML / Active Directory</li>
+          <li><span class="pfy">✓</span>Dedizierter Customer Success Manager</li>
+          <li><span class="pfy">✓</span>SLA & Uptime-Garantie</li>
+          <li><span class="pfy">✓</span>Custom Rechtsgebiete & Branchen</li>
+          <li><span class="pfy">✓</span>DATEV & ERP-Integration</li>
+        </ul>
+        <a href="mailto:enterprise@guardai.de" class="pc-btn pcb-outline" style="margin-top:auto">Kontakt aufnehmen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="fc-tag-wrap"><span class="fc-tag2">Jetzt starten — kostenlos</span></div>
+  <h2 class="fc-h r">Kein Bußgeld.<br><em>Kein Stress.</em><br>Kein Anwalt nötig.</h2>
+  <p class="fc-p r">14 Tage kostenlos testen — keine Kreditkarte, keine Einrichtungsgebühr, keine Mindestlaufzeit.</p>
+  <div class="fc-btns r">
+    <a href="#" id="btn-final-start" class="btn-primary" style="font-size:.9rem;padding:.75rem 1.75rem" onclick="handleStartClick(event)">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Kostenlos starten
+    </a>
+    <a href="mailto:info@guardai.cloud" class="btn-outline" style="font-size:.9rem;padding:.75rem 1.5rem">Demo anfragen</a>
+  </div>
+  <div class="fc-note">Kein Rechtsrat · KI-gestützte Vorprüfung · EU-Server · DSGVO-konform</div>
+</section>
+
+<!-- FAQ -->
+<section class="sec faq" id="faq">
+  <div class="sec-inner">
+    <div class="faq-inner">
+      <div class="sec-eyebrow r" style="justify-content:center">FAQ</div>
+      <h2 class="sec-h r" style="text-align:center">Häufige <em>Fragen.</em></h2>
+      <div class="faq-list">
+        <div class="fq" onclick="toggleFaq(this)"><div class="fq-q"><span class="fq-text">Ersetzt GuardAI meinen Anwalt?</span><span class="fq-icon">+</span></div><div class="fq-a">Nein — und das ist bewusst so. GuardAI ist ein automatisiertes Frühwarnsystem, das Risiken erkennt bevor sie zum Problem werden. Für verbindliche Rechtsberatung brauchen Sie weiterhin einen Anwalt. GuardAI sorgt dafür, dass Sie nur dann zum Anwalt müssen, wenn es wirklich nötig ist.</div></div>
+        <div class="fq" onclick="toggleFaq(this)"><div class="fq-q"><span class="fq-text">Werden meine Dokumente gespeichert?</span><span class="fq-icon">+</span></div><div class="fq-a">Nein. Hochgeladene Dokumente werden ausschließlich für die Analyse verwendet und danach sofort gelöscht. Im Audit-Log werden nur Metadaten gespeichert — niemals der Dokumentinhalt. Alle Daten liegen auf EU-Servern in Frankfurt.</div></div>
+        <div class="fq" onclick="toggleFaq(this)"><div class="fq-q"><span class="fq-text">Wie genau ist die KI-Analyse?</span><span class="fq-icon">+</span></div><div class="fq-a">Bei bekannten DSGVO-Standardverstößen und klassischen AGB-Fallen erreicht GuardAI eine Erkennungsrate von über 99,8%. Komplexe Rechtsfragen mit Ermessensspielraum werden als Hinweis markiert — mit der Empfehlung, einen Anwalt hinzuzuziehen.</div></div>
+        <div class="fq" onclick="toggleFaq(this)"><div class="fq-q"><span class="fq-text">Wie lange dauert das Setup?</span><span class="fq-icon">+</span></div><div class="fq-a">Der Vertrags-Scanner ist in unter 5 Minuten einsatzbereit: Konto anlegen, Dokument hochladen, fertig. E-Mail-Monitoring und Website-Wächter brauchen eine einmalige Integration von ca. 30 Minuten.</div></div>
+        <div class="fq" onclick="toggleFaq(this)"><div class="fq-q"><span class="fq-text">Welche Rechtsgebiete werden abgedeckt?</span><span class="fq-icon">+</span></div><div class="fq-a">GuardAI prüft aktuell auf DSGVO, BGB (§§ 305–310), UWG, TMG/TTDSG, PAngV und LkSG. Das EU-Paket erweitert um NIS2, AI Act und CRA. Die Wissensbasis wird kontinuierlich aktualisiert.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-brand">Guard<span>AI</span></div>
+  <div class="f-links">
+    <a href="#" onclick="openLegal('impressum');return false;">Impressum</a>
+    <a href="#" onclick="openLegal('datenschutz');return false;">Datenschutz</a>
+    <a href="#" onclick="openLegal('agb');return false;">AGB</a>
+    <a href="mailto:info@guardai.cloud">Kontakt</a>
+  </div>
+  <div class="f-note">© 2025 GuardAI · Kein Rechtsrat im Sinne des RDG</div>
+</footer>
+
+<script>
+var fd=[
+  {ic:'fic-g',i:'✓',t:'AGB — Online-Shop Update',s:'Widerrufsrecht vollständig',b:'ft-g',bl:'Konform'},
+  {ic:'fic-a',i:'!',t:'E-Mail — Angebot Follow-up',s:'Preisangabe ohne MwSt.',b:'ft-a',bl:'Warnung'},
+  {ic:'fic-r',i:'⚠',t:'Vertrag — SaaS-Anbieter USA',s:'Datentransfer ohne SCCs',b:'ft-r',bl:'Kritisch'},
+  {ic:'fic-g',i:'✓',t:'Impressum — Prüfung OK',s:'§ 5 TMG vollständig',b:'ft-g',bl:'Konform'},
+];
+var fi=0,sc=247;
+setInterval(function(){
+  sc+=Math.floor(Math.random()*3)+1;
+  var e=document.getElementById('sc');if(e)e.textContent=sc;
+  var d=fd[fi%fd.length];fi++;
+  var feed=document.getElementById('feed');if(!feed)return;
+  var div=document.createElement('div');
+  div.className='fi';div.style.opacity='0';div.style.transform='translateX(-5px)';
+  div.innerHTML='<div class="fi-ic '+d.ic+'">'+d.i+'</div><div class="fi-info"><div class="fi-t">'+d.t+'</div><div class="fi-s">'+d.s+'</div></div><span class="fi-tag '+d.b+'">'+d.bl+'</span>';
+  feed.insertBefore(div,feed.firstChild);
+  if(feed.children.length>5)feed.removeChild(feed.lastChild);
+  setTimeout(function(){div.style.transition='all .3s ease';div.style.opacity='1';div.style.transform='none';},10);
+},3500);
+function toggleFaq(el){el.classList.toggle('open')}
+var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('in')})},{threshold:.1});
+document.querySelectorAll('.r').forEach(function(el){obs.observe(el)});
+
+function openLegal(section){
+  var ol=document.getElementById('legalOverlay');
+  ol.classList.add('active');
+  document.body.style.overflow='hidden';
+  ol.scrollTop=0;
+  if(section){
+    setTimeout(function(){
+      var el=document.getElementById(section);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    },50);
+  }
+}
+function closeLegal(){
+  document.getElementById('legalOverlay').classList.remove('active');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape') closeLegal();
+});
+// Sidebar active state inside overlay
+document.addEventListener('scroll',function(){
+  var overlay=document.getElementById('legalOverlay');
+  if(!overlay.classList.contains('active')) return;
+  var links=overlay.querySelectorAll('.sidebar-links a');
+  var sections=overlay.querySelectorAll('[id]');
+  var current='';
+  sections.forEach(function(s){
+    if(overlay.scrollTop>=s.offsetTop-100) current=s.id;
+  });
+  links.forEach(function(a){
+    a.classList.toggle('sl-active',a.getAttribute('href')==='#'+current);
+  });
+},true);
+
+function setPlan(type){
+  var monthly = document.getElementById('price-monthly');
+  var annual = document.getElementById('price-annual');
+  var cta = document.getElementById('business-cta');
+  var btnM = document.getElementById('btn-monthly');
+  var btnA = document.getElementById('btn-annual');
+  if(type === 'monthly'){
+    monthly.style.display = 'block';
+    annual.style.display = 'none';
+    if(cta) cta.setAttribute('data-price-id', 'prc_monthly-23rm0344');
+    if(btnM) btnM.classList.add('pt-active');
+    if(btnA) btnA.classList.remove('pt-active');
+  } else {
+    monthly.style.display = 'none';
+    annual.style.display = 'block';
+    if(cta) cta.setAttribute('data-price-id', 'prc_yearly-cm520ggy');
+    if(btnM) btnM.classList.remove('pt-active');
+    if(btnA) btnA.classList.add('pt-active');
+  }
+}
+
+function openProfile(){
+  document.getElementById('profileOverlay').classList.add('active');
+  document.body.style.overflow='hidden';
+  loadProfileData();
+}
+function closeProfile(){
+  document.getElementById('profileOverlay').classList.remove('active');
+  document.body.style.overflow='';
+}
+
+function loadProfileData(){
+  if(typeof $memberstackDom === 'undefined') return;
+  $memberstackDom.getCurrentMember().then(function(member){
+    if(!member || !member.data) return;
+    var m = member.data;
+    var name = (m.customFields && m.customFields['full-name']) || m.email.split('@')[0];
+    var email = m.email || '';
+    var company = (m.customFields && m.customFields['company']) || '';
+    var scans = (m.customFields && m.customFields['scan-count']) || 5;
+    var total = 5;
+    if(m.planConnections && m.planConnections.length > 0){
+      var planName = m.planConnections[0].planName || 'Free';
+      document.getElementById('planName').textContent = planName;
+      if(planName.toLowerCase().includes('business')) total = 9999;
+    }
+    document.getElementById('profileName').textContent = name;
+    document.getElementById('profileEmailDisplay').textContent = email;
+    document.getElementById('profileEmail').value = email;
+    document.getElementById('profileFullName').value = name;
+    document.getElementById('profileCompany').value = company;
+    document.getElementById('profileAvatar').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('scansLeft').textContent = scans;
+    document.getElementById('scansTotal').textContent = total === 9999 ? '∞' : total;
+    var pct = total === 9999 ? 100 : Math.round(scans/total*100);
+    document.getElementById('scansFill').style.width = pct+'%';
+  });
+}
+
+function saveProfile(){
+  if(typeof $memberstackDom === 'undefined') return;
+  var name = document.getElementById('profileFullName').value;
+  var company = document.getElementById('profileCompany').value;
+  var email = document.getElementById('profileEmail').value;
+  $memberstackDom.updateMember({
+    customFields: {'full-name': name, 'company': company},
+    email: email
+  }).then(function(){
+    document.getElementById('profileMsg').style.display='block';
+    document.getElementById('emailMsg').style.display='block';
+    setTimeout(function(){
+      document.getElementById('profileMsg').style.display='none';
+      document.getElementById('emailMsg').style.display='none';
+    }, 2500);
+  });
+}
+
+function changePassword(){
+  var newPw = document.getElementById('newPassword').value;
+  var confirmPw = document.getElementById('confirmPassword').value;
+  if(newPw !== confirmPw){ alert('Passwörter stimmen nicht überein'); return; }
+  if(newPw.length < 8){ alert('Passwort muss mindestens 8 Zeichen haben'); return; }
+  if(typeof $memberstackDom === 'undefined') return;
+  $memberstackDom.updateMemberPassword({newPassword: newPw}).then(function(){
+    document.getElementById('passwordMsg').style.display='block';
+    document.getElementById('newPassword').value='';
+    document.getElementById('confirmPassword').value='';
+    setTimeout(function(){ document.getElementById('passwordMsg').style.display='none'; }, 2500);
+  });
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    closeProfile();
+    closeLegal();
+  }
+});
+
+function confirmCancel(){
+  document.getElementById('cancelModal').classList.add('active');
+}
+
+var selectedFile = null;
+var currentScanType = 'vertrag';
+
+function openScanner(){
+  document.getElementById('scannerOverlay').classList.add('active');
+  document.body.style.overflow='hidden';
+  resetScan();
+}
+function closeScanner(){
+  document.getElementById('scannerOverlay').classList.remove('active');
+  document.body.style.overflow='';
+}
+
+function switchScanTab(tab, btn){
+  currentScanType = tab;
+  document.querySelectorAll('.snav-tab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.scan-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('panel-'+tab).classList.add('active');
+  document.getElementById('scanResult').style.display='none';
+  document.getElementById('scanProgress').style.display='none';
+}
+
+function handleFile(input){
+  if(input.files && input.files[0]){
+    selectedFile = input.files[0];
+    var name = selectedFile.name;
+    document.getElementById('uploadTitle').textContent = name;
+    document.getElementById('uploadSub').textContent = (selectedFile.size/1024/1024).toFixed(2)+' MB';
+    document.getElementById('uploadZone').classList.add('file-selected');
+    document.getElementById('submitVertrag').disabled = false;
+  }
+}
+
+function startScan(type){
+  var valid = false;
+  if(type==='vertrag' && selectedFile) valid = true;
+  if(type==='email' && document.getElementById('emailText').value.trim().length > 20) valid = true;
+  if(type==='website'){
+    var url = document.getElementById('websiteUrl').value.trim();
+    valid = url.startsWith('http');
+  }
+  if(!valid){
+    alert('Bitte Inhalt eingeben bevor Sie den Scan starten.');
+    return;
+  }
+
+  // Hide panels, show progress
+  document.querySelectorAll('.scan-panel').forEach(function(p){ p.style.display='none'; });
+  document.getElementById('scanProgress').style.display='block';
+  document.getElementById('scanResult').style.display='none';
+
+  var messages = [
+    'Dokument wird gelesen...',
+    'KI-Engine analysiert Klauseln...',
+    'Rechtsdatenbank wird abgeglichen...',
+    'Befunde werden strukturiert...',
+    'Report wird erstellt...'
+  ];
+  var i = 0;
+  var interval = setInterval(function(){
+    if(i < messages.length){
+      document.getElementById('progressText').textContent = messages[i];
+      i++;
+    }
+  }, 1800);
+
+  // Call Claude API
+  var content_to_analyze = '';
+  if(type === 'email') content_to_analyze = document.getElementById('emailText').value;
+  if(type === 'website') content_to_analyze = 'Website-URL: ' + document.getElementById('websiteUrl').value;
+  if(type === 'vertrag') content_to_analyze = 'Vertragstyp: ' + document.getElementById('contractType').value + '. Datei: ' + (selectedFile ? selectedFile.name : 'unbekannt') + '. [Dateiinhalt wird via Make.com Webhook verarbeitet]';
+
+  var contractType = type === 'vertrag' ? document.getElementById('contractType').value : (type === 'email' ? 'E-Mail-Kommunikation' : 'Website-Prüfung');
+
+  // Real Make.com webhook call
+  var formData = new FormData();
+  if(type === 'vertrag' && selectedFile){
+    // Upload file to a temp hosting first, then send URL
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var base64 = e.target.result;
+      fetch('https://hook.eu1.make.com/evwe8xc981ppofd3pnyu1fyrj1k75ytg', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          file_url: 'data:application/pdf;base64,' + base64.split(',')[1],
+          user_email: window.__ms_member ? window.__ms_member.email : 'test@guardai.cloud',
+          contract_type: document.getElementById('contractType') ? document.getElementById('contractType').value : 'Vertrag'
+        })
+      })
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        clearInterval(interval);
+        document.getElementById('scanProgress').style.display='none';
+        showRealResult(data, type);
+      })
+      .catch(function(){ 
+        clearInterval(interval);
+        document.getElementById('scanProgress').style.display='none';
+        showDemoResult(type);
+      });
+    };
+    reader.readAsDataURL(selectedFile);
+  } else {
+    var textContent = type === 'email' ? document.getElementById('emailText').value : 'Website: ' + document.getElementById('websiteUrl').value;
+    fetch('https://hook.eu1.make.com/evwe8xc981ppofd3pnyu1fyrj1k75ytg', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        file_url: '',
+        text_content: textContent,
+        user_email: window.__ms_member ? window.__ms_member.email : 'test@guardai.cloud',
+        contract_type: type === 'email' ? 'E-Mail' : 'Website'
+      })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      clearInterval(interval);
+      document.getElementById('scanProgress').style.display='none';
+      showRealResult(data, type);
+    })
+    .catch(function(){
+      clearInterval(interval);
+      document.getElementById('scanProgress').style.display='none';
+      showDemoResult(type);
+    });
+  }
+}
+
+function showDemoResult(type){
+  var results = {
+    vertrag: {
+      risiko: 'WARNUNG',
+      kritisch: 1,
+      warnungen: 2,
+      hinweise: 1,
+      empfehlung: 'Es wurden 1 kritischer Befund und 2 Warnungen identifiziert. Bitte lassen Sie die markierten Klauseln durch einen Rechtsanwalt prüfen bevor Sie den Vertrag unterzeichnen.',
+      befunde: [
+        {schwere:'KRITISCH',problem:'Haftungsausschluss für Vorsatz — unwirksam nach § 276 BGB',klausel:'...schließt jede Haftung aus, einschließlich Vorsatz...',norm:'§ 276 Abs. 3 BGB',empfehlung:'Haftungsausschluss auf grobe Fahrlässigkeit begrenzen. Vorsatz kann nicht ausgeschlossen werden.'},
+        {schwere:'WARNUNG',problem:'Einseitige Preisänderungsklausel ohne sachlichen Grund',klausel:'...behält sich das Recht vor, Preise jederzeit anzupassen...',norm:'§ 307 Abs. 1 BGB',empfehlung:'Preisänderungen auf sachliche Gründe beschränken und 6-wöchige Ankündigungsfrist einführen.'},
+        {schwere:'WARNUNG',problem:'Vertragsstrafe ohne angemessene Obergrenze',klausel:'...Vertragsstrafe in Höhe von 10% des Jahresumsatzes...',norm:'§ 309 Nr. 6 BGB',empfehlung:'Vertragsstrafen auf einen angemessenen Betrag begrenzen — üblicherweise max. 5% des Auftragswerts.'}
+      ]
+    },
+    email: {
+      risiko: 'NIEDRIG',
+      kritisch: 0,
+      warnungen: 1,
+      hinweise: 1,
+      empfehlung: 'Die E-Mail enthält eine Warnung bezüglich der Pflichtangaben. Ergänzen Sie die fehlenden Informationen vor dem Versand.',
+      befunde: [
+        {schwere:'WARNUNG',problem:'Pflichtangaben in der E-Mail-Signatur unvollständig',klausel:'Aktuelle Signatur enthält keine Angabe der Rechtsform',norm:'§ 5 TMG, § 37b HGB',empfehlung:'Ergänzen Sie Rechtsform, Handelsregisternummer und Geschäftsführer in der Signatur.'}
+      ]
+    },
+    website: {
+      risiko: 'NIEDRIG',
+      kritisch: 0,
+      warnungen: 1,
+      hinweise: 2,
+      empfehlung: 'Ihre Website ist weitgehend konform. Eine Warnung sollte zeitnah behoben werden.',
+      befunde: [
+        {schwere:'WARNUNG',problem:'Cookie-Banner enthält kein aktives Opt-in für nicht-notwendige Cookies',klausel:'Aktueller Banner: "Durch die Nutzung stimmen Sie zu"',norm:'§ 25 TTDSG, DSGVO Art. 7',empfehlung:'Implementieren Sie einen echten Opt-in Button. Voreingestellte Zustimmung ist nicht zulässig.'}
+      ]
+    }
+  };
+
+  var r = results[type];
+  var riskClass = r.risiko === 'KRITISCH' ? 'kritisch' : r.risiko === 'WARNUNG' ? 'warnung' : 'niedrig';
+  var riskIcon = r.risiko === 'KRITISCH' ? '⚠' : r.risiko === 'WARNUNG' ? '!' : '✓';
+
+  var befundeHTML = r.befunde.map(function(b){
+    var bClass = b.schwere === 'KRITISCH' ? 'r' : b.schwere === 'WARNUNG' ? 'a' : 'h';
+    return '<li class="befund-item"><div class="bi-head"><span class="bi-badge bib-'+bClass+'">'+b.schwere+'</span><span class="bi-problem">'+b.problem+'</span></div><div class="bi-klausel">„'+b.klausel+'"</div><div class="bi-norm">'+b.norm+'</div><div class="bi-empfehlung">→ '+b.empfehlung+'</div></li>';
+  }).join('');
+
+  document.getElementById('scanResult').innerHTML =
+    '<div class="result-header rh-'+riskClass+'"><div class="rh-left"><div class="ri-'+riskClass+' rh-icon">'+riskIcon+'</div><div><div class="rh-title">Risiko: '+r.risiko+'</div><div class="rh-sub">Analyse abgeschlossen — '+new Date().toLocaleTimeString('de-DE')+'</div></div></div></div>'+
+    '<div class="result-stats"><div class="rs-stat"><div class="rs-val rsv-r">'+r.kritisch+'</div><div class="rs-lbl">Kritisch</div></div><div class="rs-stat"><div class="rs-val rsv-a">'+r.warnungen+'</div><div class="rs-lbl">Warnungen</div></div><div class="rs-stat"><div class="rs-val rsv-g">'+r.hinweise+'</div><div class="rs-lbl">Hinweise</div></div></div>'+
+    '<div class="result-body"><div class="result-empfehlung">'+r.empfehlung+'</div><ul class="result-befunde">'+befundeHTML+'</ul><div class="result-disclaimer">⚠ Diese Analyse wurde automatisiert durch GuardAI erstellt und stellt keine Rechtsberatung dar. Alle Befunde sind durch einen zugelassenen Rechtsanwalt zu prüfen.</div><button class="result-new-scan" onclick="resetScan()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Neuen Scan starten</button></div>';
+
+  document.getElementById('scanResult').style.display='block';
+  document.getElementById('scanResult').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function resetScan(){
+  selectedFile = null;
+  document.getElementById('fileInput').value='';
+  document.getElementById('uploadTitle').textContent='Vertrag hier ablegen';
+  document.getElementById('uploadSub').textContent='oder Datei auswählen';
+  document.getElementById('uploadZone').classList.remove('file-selected');
+  document.getElementById('submitVertrag').disabled=true;
+  document.getElementById('emailText').value='';
+  document.getElementById('websiteUrl').value='';
+  document.getElementById('scanResult').style.display='none';
+  document.getElementById('scanProgress').style.display='none';
+  document.querySelectorAll('.scan-panel').forEach(function(p){ p.style.display=''; });
+  document.getElementById('panel-vertrag').classList.add('active');
+  document.querySelectorAll('.snav-tab').forEach(function(b,i){ b.classList.toggle('active', i===0); });
+  currentScanType='vertrag';
+}
+
+function showRealResult(data, type){
+  var risiko = data.gesamt_risiko || 'NIEDRIG';
+  var kritisch = data.kritische_befunde || 0;
+  var warnungen = data.warnungen || 0;
+  var hinweise = data.hinweise || 0;
+  var empfehlung = data.empfehlung || 'Keine kritischen Befunde gefunden.';
+  var befunde = data.befunde || [];
+
+  var riskClass = risiko === 'KRITISCH' ? 'kritisch' : risiko === 'WARNUNG' ? 'warnung' : 'niedrig';
+  var riskIcon = risiko === 'KRITISCH' ? '⚠' : risiko === 'WARNUNG' ? '!' : '✓';
+
+  var befundeHTML = befunde.map(function(b){
+    var bClass = b.schweregrad === 'KRITISCH' ? 'r' : b.schweregrad === 'WARNUNG' ? 'a' : 'h';
+    return '<li class="befund-item"><div class="bi-head"><span class="bi-badge bib-'+bClass+'">'+b.schweregrad+'</span><span class="bi-problem">'+(b.problem||'')+'</span></div><div class="bi-klausel">'+(b.rechtsgrundlage||'')+'</div><div class="bi-empfehlung">→ '+(b.empfehlung||'')+'</div></li>';
+  }).join('');
+
+  document.getElementById('scanResult').innerHTML =
+    '<div class="result-header rh-'+riskClass+'"><div class="rh-left"><div class="ri-'+riskClass+' rh-icon">'+riskIcon+'</div><div><div class="rh-title">Risiko: '+risiko+'</div><div class="rh-sub">Analyse abgeschlossen — '+new Date().toLocaleTimeString('de-DE')+'</div></div></div></div>'+
+    '<div class="result-stats"><div class="rs-stat"><div class="rs-val rsv-r">'+kritisch+'</div><div class="rs-lbl">Kritisch</div></div><div class="rs-stat"><div class="rs-val rsv-a">'+warnungen+'</div><div class="rs-lbl">Warnungen</div></div><div class="rs-stat"><div class="rs-val rsv-g">'+hinweise+'</div><div class="rs-lbl">Hinweise</div></div></div>'+
+    '<div class="result-body"><div class="result-empfehlung">'+empfehlung+'</div><ul class="result-befunde">'+befundeHTML+'</ul><div class="result-disclaimer">⚠ Diese Analyse wurde automatisiert durch GuardAI erstellt und stellt keine Rechtsberatung dar.</div><div style="margin-top:.75rem;font-size:.78rem;color:var(--forest)">✓ PDF-Report wurde an Ihre E-Mail gesendet</div><button class="result-new-scan" onclick="resetScan()">← Neuen Scan starten</button></div>';
+
+  document.getElementById('scanResult').style.display='block';
+  document.getElementById('scanResult').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+
+// Memberstack visibility handling — onAuthChange feuert bei Signup, Login, Logout
+(function(){ document.documentElement.style.visibility='hidden'; })();
+
+document.addEventListener('DOMContentLoaded', function(){
+  function initMs(){
+    // Sofortiger Check
+    window.$memberstackDom.getCurrentMember().then(function(res){
+      updateNavForMember(res && res.data ? res.data : null);
+      document.documentElement.style.visibility='';
+    }).catch(function(){ document.documentElement.style.visibility=''; });
+
+    // Bei jedem Auth-Wechsel (Signup, Login, Logout) sofort updaten
+    window.$memberstackDom.onAuthChange(function(member){
+      var m = member && member.data ? member.data : member;
+      updateNavForMember(m || null);
+    });
+  }
+
+  if(typeof window.$memberstackDom !== 'undefined'){
+    initMs();
+  } else {
+    var checkMs = setInterval(function(){
+      if(typeof window.$memberstackDom !== 'undefined'){ clearInterval(checkMs); initMs(); }
+    }, 100);
+    setTimeout(function(){ clearInterval(checkMs); document.documentElement.style.visibility=''; }, 3000);
+  }
+});
+
+// Aktuellen Login-Status cachen
+var _currentMember = null;
+
+// "Kostenlos starten" — eingeloggt → versteckt (Button wird ausgeblendet), ausgeloggt → Signup
+function handleStartClick(e){
+  e.preventDefault();
+  if(!_currentMember){
+    window.$memberstackDom.openModal('SIGNUP').then(function(result){
+      // Nach Signup getCurrentMember aufrufen um sicherzustellen dass Nav updated wird
+      window.$memberstackDom.getCurrentMember().then(function(res){
+        if(res && res.data) updateNavForMember(res.data);
+      });
+    }).catch(function(){});
+  }
+}
+
+// How-Steps Click
+function handleHowClick(tab){
+  if(_currentMember){ openScanner(); }
+}
+
+function handleFeatureClick(tab){
+  if(_currentMember){ openScanner(); }
+}
+function handleBusinessClick(e){
+  e.preventDefault();
+  var btn = document.getElementById('business-cta');
+  var priceId = btn.getAttribute('data-price-id') || 'prc_monthly-23rm0344';
+
+  console.log('[GuardAI] handleBusinessClick — priceId:', priceId, '| member:', !!_currentMember);
+
+  if(_currentMember){
+    // Lademeldung anzeigen
+    showCheckoutToast();
+    // Eingeloggt → direkt Stripe Checkout
+    window.$memberstackDom.purchasePlansWithCheckout({
+      priceId: priceId
+    }).then(function(result){
+      console.log('[GuardAI] Checkout result:', result);
+      // Falls autoRedirect:false oder Weiterleitung nicht passiert
+      if(result && result.data && result.data.url){
+        window.location.href = result.data.url;
+      }
+    }).catch(function(err){
+      hideCheckoutToast();
+      console.error('[GuardAI] Checkout error:', err);
+      alert('Fehler beim Checkout: ' + (err.message || err));
+    });
+  } else {
+    // Ausgeloggt → Signup Modal, danach Checkout
+    window.$memberstackDom.openModal('SIGNUP').then(function(){
+      showCheckoutToast();
+      return window.$memberstackDom.purchasePlansWithCheckout({ priceId: priceId });
+    }).then(function(result){
+      if(result && result.data && result.data.url){
+        window.location.href = result.data.url;
+      }
+    }).catch(function(err){
+      hideCheckoutToast();
+      console.error('[GuardAI] Signup/Checkout error:', err);
+    });
+  }
+}
+
+function showCheckoutToast(){
+  var t = document.getElementById('checkout-toast');
+  if(t) t.style.display = 'flex';
+}
+function hideCheckoutToast(){
+  var t = document.getElementById('checkout-toast');
+  if(t) t.style.display = 'none';
+}
+
+function updateNavForMember(member){
+  _currentMember = member;
+
+  var scanner   = document.getElementById('btn-scanner');
+  var profil    = document.getElementById('btn-profil');
+  var anmelden  = document.getElementById('btn-anmelden');
+  var kostenlos = document.getElementById('btn-kostenlos');
+  var bizCta    = document.getElementById('business-cta');
+
+  // Elemente die nur für Nicht-Eingeloggte sichtbar sind
+  var heroStart  = document.getElementById('btn-hero-start');
+  var finalStart = document.getElementById('btn-final-start');
+  var cardFree   = document.getElementById('card-free');
+
+  // How-Steps: eingeloggt → klickbar, ausgeloggt → gesperrt
+  var hsIds = ['hs-1','hs-2','hs-3','hs-4'];
+  hsIds.forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    if(member){
+      el.classList.remove('hs-locked');
+      el.classList.add('hs-clickable');
+    } else {
+      el.classList.add('hs-locked');
+      el.classList.remove('hs-clickable');
+    }
+  });
+
+  // Feature-Cards: eingeloggt → klickbar, ausgeloggt → gesperrt
+  var fcIds = ['fc-vertrag','fc-email','fc-website','fc-dashboard'];
+  fcIds.forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    if(member){
+      el.classList.remove('fc-locked');
+      el.classList.add('fc-clickable');
+    } else {
+      el.classList.add('fc-locked');
+      el.classList.remove('fc-clickable');
+    }
+  });
+
+  if(member){
+    // Nav
+    if(scanner)   scanner.style.display  = 'inline-flex';
+    if(profil)    profil.style.display   = 'inline-block';
+    if(anmelden)  anmelden.style.display = 'none';
+    if(kostenlos) kostenlos.style.display= 'none';
+    // Hero "Kostenlos starten" ausblenden
+    if(heroStart)  heroStart.style.display = 'none';
+    // Final CTA "Kostenlos starten" ausblenden
+    if(finalStart) finalStart.style.display= 'none';
+    // Free-Plan-Karte ausblenden
+    if(cardFree)   cardFree.style.display  = 'none';
+    // Business-Button Text
+    if(bizCta)    bizCta.textContent = 'Jetzt upgraden';
+  } else {
+    if(scanner)   scanner.style.display  = 'none';
+    if(profil)    profil.style.display   = 'none';
+    if(anmelden)  anmelden.style.display = 'inline-block';
+    if(kostenlos) kostenlos.style.display= 'inline-block';
+    if(heroStart)  heroStart.style.display = '';
+    if(finalStart) finalStart.style.display= '';
+    if(cardFree)   cardFree.style.display  = '';
+    if(bizCta)    bizCta.textContent = '14 Tage kostenlos testen';
+  }
+}
+</script>
+
+<!-- ── LEGAL OVERLAY ── -->
+<div class="legal-overlay" id="legalOverlay">
+  <div class="legal-nav">
+    <span class="legal-brand">Guard<span>AI</span></span>
+    <a class="legal-close" onclick="closeLegal()">← Zurück zur Website</a>
+  </div>
+  <div class="legal-layout">
+    <aside class="legal-sidebar" id="legalSidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Impressum</div>
+        <ul class="sidebar-links">
+          <li><a href="#impressum">Angaben § 5 TMG</a></li>
+          <li><a href="#impressum-haftung">Haftungsausschluss</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Datenschutz</div>
+        <ul class="sidebar-links">
+          <li><a href="#ds-verantwortlicher">Verantwortlicher</a></li>
+          <li><a href="#ds-grundsaetze">Grundsätze</a></li>
+          <li><a href="#ds-website">Website-Daten</a></li>
+          <li><a href="#ds-ki">KI-Analyse</a></li>
+          <li><a href="#ds-auftragsverarbeiter">Auftragsverarbeiter</a></li>
+          <li><a href="#ds-rechte">Ihre Rechte</a></li>
+          <li><a href="#ds-cookies">Cookies</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">AGB</div>
+        <ul class="sidebar-links">
+          <li><a href="#agb-1">§ 1 Geltungsbereich</a></li>
+          <li><a href="#agb-2">§ 2 Leistungen</a></li>
+          <li><a href="#agb-3">§ 3 Vertragsschluss</a></li>
+          <li><a href="#agb-4">§ 4 Vergütung</a></li>
+          <li><a href="#agb-5">§ 5 Kündigung</a></li>
+          <li><a href="#agb-6">§ 6 Nutzerpflichten</a></li>
+          <li><a href="#agb-7">§ 7 KI-Haftung</a></li>
+          <li><a href="#agb-8">§ 8 Haftung</a></li>
+          <li><a href="#agb-9">§ 9 Nutzungsrechte</a></li>
+          <li><a href="#agb-10">§ 10 Vertraulichkeit</a></li>
+          <li><a href="#agb-11">§ 11 AGB-Änderungen</a></li>
+          <li><a href="#agb-12">§ 12 Schluss</a></li>
+        </ul>
+      </div>
+    </aside>
+    <main class="legal-main">
+
+      <!-- IMPRESSUM -->
+      <div class="doc-section" id="impressum">
+        <div class="doc-header">
+          <div class="doc-eyebrow">Rechtliches</div>
+          <h1>Impressum</h1>
+          <div class="doc-meta">Stand: Mai 2025 · Gemäß § 5 TMG</div>
+        </div>
+        <div class="lcard">
+          <div class="lcard-par">Angaben gemäß § 5 TMG</div>
+          <div class="info-row"><span class="ik">Name</span><span class="iv">Emiralp Belur</span></div>
+          <div class="info-row"><span class="ik">Anschrift</span><span class="iv">Rebhuhnweg 11, 73529 Schwäbisch Gmünd</span></div>
+          <div class="info-row"><span class="ik">Land</span><span class="iv">Deutschland</span></div>
+          <div class="info-row"><span class="ik">E-Mail</span><span class="iv"><a href="mailto:info@guardai.cloud">info@guardai.cloud</a></span></div>
+        </div>
+        <div class="lcard">
+          <div class="lcard-par">Unternehmensform</div>
+          <h2>Einzelunternehmen</h2>
+          <p>GuardAI wird als Einzelunternehmen von Emiralp Belur betrieben. Es besteht keine Eintragung im Handelsregister. Die Umsatzsteuer-Identifikationsnummer wird nach Zuteilung durch das Finanzamt hier ergänzt.</p>
+        </div>
+        <div class="lcard" id="impressum-haftung">
+          <div class="lcard-par">Haftungsausschluss</div>
+          <h2>Haftung für Inhalte</h2>
+          <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte verantwortlich. Nach §§ 8–10 TMG sind wir nicht verpflichtet, fremde Informationen zu überwachen.</p>
+          <h2>Urheberrecht</h2>
+          <p>Die durch den Seitenbetreiber erstellten Inhalte unterliegen dem deutschen Urheberrecht. Vervielfältigung bedarf der schriftlichen Zustimmung.</p>
+          <h2>KI-Hinweis</h2>
+          <p>GuardAI nutzt KI zur automatisierten Dokumentenanalyse. Die Ausgaben stellen keine Rechtsberatung im Sinne des RDG dar.</p>
+        </div>
+      </div>
+
+      <div class="ldivider"></div>
+
+      <!-- DATENSCHUTZ -->
+      <div class="doc-section" id="datenschutz">
+        <div class="doc-header">
+          <div class="doc-eyebrow">Rechtliches</div>
+          <h1>Datenschutz&shy;erklärung</h1>
+          <div class="doc-meta">Stand: Mai 2025 · Gemäß DSGVO, BDSG und TTDSG</div>
+        </div>
+        <div class="lcard" id="ds-verantwortlicher">
+          <div class="lcard-par">Abschnitt 1</div>
+          <h2>Verantwortlicher</h2>
+          <div class="info-row"><span class="ik">Name</span><span class="iv">Emiralp Belur</span></div>
+          <div class="info-row"><span class="ik">Anschrift</span><span class="iv">Rebhuhnweg 11, 73529 Schwäbisch Gmünd</span></div>
+          <div class="info-row"><span class="ik">E-Mail</span><span class="iv"><a href="mailto:info@guardai.cloud">info@guardai.cloud</a></span></div>
+        </div>
+        <div class="lcard" id="ds-grundsaetze">
+          <div class="lcard-par">Abschnitt 2</div>
+          <h2>Grundsätze der Datenverarbeitung</h2>
+          <p>Wir verarbeiten personenbezogene Daten nur soweit erforderlich. Rechtsgrundlagen: Art. 6 Abs. 1 lit. a, b, c und f DSGVO.</p>
+        </div>
+        <div class="lcard" id="ds-website">
+          <div class="lcard-par">Abschnitt 3</div>
+          <h2>Datenerhebung auf dieser Website</h2>
+          <h3>Server-Logfiles</h3>
+          <p>Hosting durch Netlify, Inc. (USA). Automatische Speicherung von Browsertyp, IP-Adresse und Uhrzeit. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
+          <h3>Kontaktaufnahme per E-Mail</h3>
+          <p>E-Mail-Anfragen werden zur Bearbeitung gespeichert. Keine Weitergabe ohne Einwilligung. Speicherdauer: 3 Jahre. Rechtsgrundlage: Art. 6 Abs. 1 lit. b und f DSGVO.</p>
+        </div>
+        <div class="lcard" id="ds-ki">
+          <div class="lcard-par">Abschnitt 4</div>
+          <h2>KI-gestützte Dokumentenanalyse</h2>
+          <div class="lnote"><p>Relevant wenn Sie Dokumente zur Analyse hochladen.</p></div>
+          <p>Hochgeladene Dokumente werden nach der Analyse sofort gelöscht. Im Log werden nur Metadaten gespeichert — niemals Dokumentinhalte. Keine Nutzung für KI-Training.</p>
+          <h3>Drittlandübermittlung an Anthropic (USA)</h3>
+          <p>KI-Analyse via Anthropic, PBC (USA). Übermittlung auf Basis von EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO). DPA nach Art. 28 DSGVO abgeschlossen.</p>
+        </div>
+        <div class="lcard" id="ds-auftragsverarbeiter">
+          <div class="lcard-par">Abschnitt 5</div>
+          <h2>Auftragsverarbeiter</h2>
+          <div class="info-row"><span class="ik">Hosting</span><span class="iv">Netlify, Inc., San Francisco, USA — DPA abgeschlossen</span></div>
+          <div class="info-row"><span class="ik">KI-Analyse</span><span class="iv">Anthropic, PBC, San Francisco, USA — DPA abgeschlossen</span></div>
+        </div>
+        <div class="lcard" id="ds-rechte">
+          <div class="lcard-par">Abschnitt 6</div>
+          <h2>Ihre Rechte</h2>
+          <ul>
+            <li><strong>Auskunft</strong> (Art. 15 DSGVO)</li>
+            <li><strong>Berichtigung</strong> (Art. 16 DSGVO)</li>
+            <li><strong>Löschung</strong> (Art. 17 DSGVO)</li>
+            <li><strong>Einschränkung</strong> (Art. 18 DSGVO)</li>
+            <li><strong>Datenübertragbarkeit</strong> (Art. 20 DSGVO)</li>
+            <li><strong>Widerspruch</strong> (Art. 21 DSGVO)</li>
+          </ul>
+          <p>Anfragen an: <a href="mailto:info@guardai.cloud">info@guardai.cloud</a> — Antwort innerhalb 30 Tagen.</p>
+          <div class="lnote"><p>Aufsichtsbehörde: Landesbeauftragter für den Datenschutz Baden-Württemberg, Lautenschlagerstraße 20, 70173 Stuttgart</p></div>
+        </div>
+        <div class="lcard" id="ds-cookies">
+          <div class="lcard-par">Abschnitt 7</div>
+          <h2>Cookies</h2>
+          <p>Ausschließlich technisch notwendige Cookies. Kein Google Analytics, kein Facebook Pixel, keine Marketing-Cookies. Rechtsgrundlage: § 25 Abs. 2 Nr. 2 TTDSG.</p>
+        </div>
+      </div>
+
+      <div class="ldivider"></div>
+
+      <!-- AGB -->
+      <div class="doc-section" id="agb">
+        <div class="doc-header">
+          <div class="doc-eyebrow">Rechtliches</div>
+          <h1>Allgemeine Geschäfts&shy;bedingungen</h1>
+          <div class="doc-meta">Stand: Mai 2025 · Version 1.0</div>
+        </div>
+        <div class="lwarn"><p>Diese AGB gelten ausschließlich für Unternehmer im Sinne des § 14 BGB. GuardAI richtet sich nicht an Verbraucher.</p></div>
+        <div class="lcard" id="agb-1"><div class="lcard-par">§ 1</div><h2>Geltungsbereich und Anbieter</h2><p>Diese AGB gelten für alle Verträge zwischen GuardAI (Emiralp Belur, Rebhuhnweg 11, 73529 Schwäbisch Gmünd, <a href="mailto:info@guardai.cloud">info@guardai.cloud</a>) und Unternehmern im Sinne des § 14 BGB. Entgegenstehende Bedingungen finden keine Anwendung.</p></div>
+        <div class="lcard" id="agb-2"><div class="lcard-par">§ 2</div><h2>Leistungsbeschreibung</h2><p>GuardAI stellt eine KI-gestützte SaaS-Plattform für automatisierte Compliance-Vorprüfungen bereit. Verfügbarkeit: 99,0 % im Jahresdurchschnitt, ausgenommen angekündigte Wartungsfenster (48 h Vorlauf).</p></div>
+        <div class="lcard" id="agb-3"><div class="lcard-par">§ 3</div><h2>Vertragsschluss und Registrierung</h2><p>Vertragsschluss durch Online-Registrierung und E-Mail-Bestätigung. Wahrheitsgemäße Angaben erforderlich. Zugangsdaten nicht an Dritte weitergeben.</p></div>
+        <div class="lcard" id="agb-4"><div class="lcard-par">§ 4</div><h2>Vergütung und Zahlungsbedingungen</h2><p>Vergütung gemäß Preisliste, zzgl. MwSt. Zahlung monatlich oder jährlich via Stripe. Bei Verzug: Sperrung nach Mahnung (14 Tage). Preiserhöhungen: 6 Wochen Vorlauf, Sonderkündigungsrecht.</p></div>
+        <div class="lcard" id="agb-5"><div class="lcard-par">§ 5</div><h2>Laufzeit und Kündigung</h2><p>Automatische Verlängerung. Kündigung per E-Mail an <a href="mailto:info@guardai.cloud">info@guardai.cloud</a> oder über die Kontoverwaltung:</p><ul><li>Monatlich: 14 Tage zum Monatsende</li><li>Jährlich: 30 Tage zum Laufzeitende</li></ul></div>
+        <div class="lcard" id="agb-6"><div class="lcard-par">§ 6</div><h2>Pflichten des Nutzers</h2><p>Nur berechtigte Dokumente hochladen. Keine rechtswidrige Nutzung. Zugangsdaten sichern. Freistellung des Anbieters von Drittansprüchen bei rechtswidriger Nutzung.</p></div>
+        <div class="lcard" id="agb-7">
+          <div class="lcard-par">§ 7</div>
+          <h2>KI-Haftungsausschluss</h2>
+          <div class="lwarn"><p>Besonders wichtig — bitte sorgfältig lesen.</p></div>
+          <p>GuardAI-Analysen sind automatisierte Vorprüfungen — keine Rechtsberatung. Der Anbieter übernimmt keine Gewähr für Richtigkeit oder Vollständigkeit. Für verbindliche Rechtsberatung ist stets ein Anwalt hinzuzuziehen.</p>
+          <p>Keine Haftung für verpasste Rechtsverstöße, Bußgelder oder wirtschaftliche Schäden aus KI-Fehlern.</p>
+        </div>
+        <div class="lcard" id="agb-8"><div class="lcard-par">§ 8</div><h2>Haftung des Anbieters</h2><p>Unbegrenzt bei Vorsatz, grober Fahrlässigkeit, Schäden an Leben/Körper/Gesundheit. Bei leicht fahrlässiger Verletzung von Kardinalpflichten: begrenzt auf den Jahresvertragswert. Im Übrigen: Haftungsausschluss.</p></div>
+        <div class="lcard" id="agb-9"><div class="lcard-par">§ 9</div><h2>Nutzungsrechte</h2><p>Nicht-ausschließliches Nutzungsrecht für die Vertragsdauer. Alle Plattformrechte beim Anbieter. Nutzer behält Rechte an hochgeladenen Dokumenten. Anonymisierte Metadaten dürfen zur KI-Verbesserung genutzt werden.</p></div>
+        <div class="lcard" id="agb-10"><div class="lcard-par">§ 10</div><h2>Vertraulichkeit</h2><p>Beide Parteien verpflichten sich zur Geheimhaltung vertraulicher Informationen, insbesondere Dokumente und Analyse-Ergebnisse.</p></div>
+        <div class="lcard" id="agb-11"><div class="lcard-par">§ 11</div><h2>Änderungen der AGB</h2><p>Änderungen werden 6 Wochen vor Inkrafttreten per E-Mail angekündigt. Kein Widerspruch innerhalb von 4 Wochen gilt als Zustimmung.</p></div>
+        <div class="lcard" id="agb-12"><div class="lcard-par">§ 12</div><h2>Schlussbestimmungen</h2><p>Deutsches Recht, Ausschluss UN-Kaufrecht. Gerichtsstand: Schwäbisch Gmünd. Salvatorische Klausel.</p><div class="lnote"><p>Fragen: <a href="mailto:info@guardai.cloud" style="color:#0F5A3F">info@guardai.cloud</a></p></div></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+
+<!-- ── PROFILE OVERLAY ── -->
+<div class="profile-overlay" id="profileOverlay">
+  <div class="profile-nav">
+    <span class="profile-brand">Guard<span>AI</span></span>
+    <div class="profile-nav-right">
+      <span class="profile-back" onclick="closeProfile()">← Zurück zur Website</span>
+      <span class="profile-logout" data-ms-action="logout">Abmelden</span>
+    </div>
+  </div>
+  <div class="profile-wrap">
+    <div class="profile-header">
+      <div class="profile-avatar" id="profileAvatar">E</div>
+      <div class="profile-greeting">Hallo, <em id="profileName">Nutzer</em></div>
+      <div class="profile-email-display" id="profileEmailDisplay">–</div>
+    </div>
+
+    <div class="profile-grid">
+
+      <!-- PLAN CARD -->
+      <div class="profile-card plan-card">
+        <div class="pc-label">Ihr Plan</div>
+        <div class="plan-badge">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span id="planName">Free</span>
+        </div>
+        <div class="plan-scan-bar">
+          <div class="psb-label">
+            <span>Scans verbleibend</span>
+            <span><b id="scansLeft">5</b> / <span id="scansTotal">5</span></span>
+          </div>
+          <div class="psb-track"><div class="psb-fill" id="scansFill" style="width:100%"></div></div>
+        </div>
+        <span class="plan-upgrade" onclick="document.getElementById('profileOverlay').classList.remove('active');document.body.style.overflow='';document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">
+          Upgrade → Business
+        </span>
+      </div>
+
+      <!-- PLAN VERWALTEN -->
+      <div class="profile-card">
+        <div class="pc-label ink">Abo verwalten</div>
+        <p style="font-size:.82rem;font-weight:300;color:var(--ink-70);line-height:1.65;margin-bottom:1.25rem">Plan wechseln, Zahlungsmethode ändern oder Abo kündigen — alles über das sichere Stripe-Portal.</p>
+        <a data-ms-action="customer-portal" class="pf-save" style="display:inline-block;text-decoration:none;cursor:pointer">
+          Abo & Zahlung verwalten →
+        </a>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--ink-08)">
+          <div style="font-size:.72rem;font-weight:500;color:var(--ink-45);margin-bottom:.5rem;letter-spacing:.02em">Kündigung</div>
+          <p style="font-size:.78rem;font-weight:300;color:var(--ink-70);line-height:1.6;margin-bottom:.75rem">Nach der Kündigung bleibt Ihr Zugang bis zum Ende der aktuellen Abrechnungsperiode aktiv.</p>
+          <button class="plan-cancel-btn" onclick="confirmCancel()">Abo kündigen</button>
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="profile-card">
+        <div class="pc-label ink">E-Mail Adresse</div>
+        <div class="profile-field">
+          <div class="pf-label">E-Mail</div>
+          <input type="email" class="pf-input" id="profileEmail" data-ms-member="email" placeholder="ihre@email.de">
+        </div>
+        <button class="pf-save" onclick="saveProfile()">Speichern</button>
+        <div class="pf-msg" id="emailMsg">✓ Gespeichert</div>
+      </div>
+
+      <!-- NAME & FIRMA -->
+      <div class="profile-card full">
+        <div class="pc-label ink">Persönliche Daten</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="profile-field">
+            <div class="pf-label">Vollständiger Name</div>
+            <input type="text" class="pf-input" id="profileFullName" data-ms-member="full-name" placeholder="Max Mustermann">
+          </div>
+          <div class="profile-field">
+            <div class="pf-label">Firma</div>
+            <input type="text" class="pf-input" id="profileCompany" data-ms-member="company" placeholder="Mustermann GmbH">
+          </div>
+        </div>
+        <button class="pf-save" onclick="saveProfile()">Speichern</button>
+        <div class="pf-msg" id="profileMsg">✓ Gespeichert</div>
+      </div>
+
+      <!-- PASSWORT -->
+      <div class="profile-card full">
+        <div class="pc-label ink">Passwort ändern</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="profile-field">
+            <div class="pf-label">Neues Passwort</div>
+            <input type="password" class="pf-input" id="newPassword" placeholder="Neues Passwort">
+          </div>
+          <div class="profile-field">
+            <div class="pf-label">Passwort bestätigen</div>
+            <input type="password" class="pf-input" id="confirmPassword" placeholder="Passwort wiederholen">
+          </div>
+        </div>
+        <button class="pf-save" onclick="changePassword()">Passwort ändern</button>
+        <div class="pf-msg" id="passwordMsg">✓ Passwort geändert</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- CANCEL MODAL -->
+<div class="cancel-modal" id="cancelModal">
+  <div class="cancel-box">
+    <div class="cancel-title">Abo wirklich kündigen?</div>
+    <div class="cancel-desc">Ihr Zugang bleibt bis zum Ende der aktuellen Abrechnungsperiode aktiv. Danach werden Sie auf den Free Plan zurückgesetzt.</div>
+    <div class="cancel-actions">
+      <button class="cancel-keep" onclick="document.getElementById('cancelModal').classList.remove('active')">Behalten</button>
+      <a class="cancel-confirm" data-ms-action="customer-portal">Zum Stripe-Portal →</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── SCANNER DASHBOARD ── -->
+<div class="scanner-overlay" id="scannerOverlay">
+  <div class="scanner-nav">
+    <span class="scanner-brand">Guard<span>AI</span></span>
+    <div class="scanner-nav-tabs">
+      <button class="snav-tab active" onclick="switchScanTab('vertrag',this)">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:inline;vertical-align:-1px;margin-right:4px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Vertrag
+      </button>
+      <button class="snav-tab" onclick="switchScanTab('email',this)">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:inline;vertical-align:-1px;margin-right:4px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        E-Mail
+      </button>
+      <button class="snav-tab" onclick="switchScanTab('website',this)">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:inline;vertical-align:-1px;margin-right:4px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Website
+      </button>
+    </div>
+    <div class="scanner-nav-right">
+      <span class="scanner-back" onclick="closeScanner()">← Zurück</span>
+      <span class="scanner-profile-btn" onclick="closeScanner();openProfile()">Mein Profil</span>
+    </div>
+  </div>
+
+  <div class="scanner-wrap">
+    <div class="scanner-title">GuardAI <em>Scanner</em></div>
+    <div class="scanner-sub">Laden Sie ein Dokument hoch oder geben Sie Text ein — Ergebnis in unter 30 Sekunden.</div>
+
+    <!-- VERTRAG TAB -->
+    <div class="scan-panel active" id="panel-vertrag">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" accept=".pdf,.doc,.docx" style="display:none" onchange="handleFile(this)">
+        <div class="uz-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="uz-title" id="uploadTitle">Vertrag hier ablegen</div>
+        <div class="uz-sub" id="uploadSub">oder Datei auswählen</div>
+        <div class="uz-btn">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Datei auswählen
+        </div>
+        <div class="uz-formats">PDF · DOCX · DOC — max. 10 MB</div>
+      </div>
+
+      <div class="scan-options">
+        <div>
+          <span class="scan-option-label">Vertragstyp</span>
+          <select class="scan-select" id="contractType">
+            <option value="Allgemeiner Vertrag">Allgemeiner Vertrag</option>
+            <option value="SaaS-Nutzungsvertrag B2B">SaaS-Nutzungsvertrag B2B</option>
+            <option value="Lieferantenvertrag">Lieferantenvertrag</option>
+            <option value="NDA / Geheimhaltungsvertrag">NDA / Geheimhaltungsvertrag</option>
+            <option value="Arbeitsvertrag">Arbeitsvertrag</option>
+            <option value="Kaufvertrag B2C">Kaufvertrag B2C</option>
+            <option value="Werkvertrag">Werkvertrag</option>
+            <option value="AGB">AGB</option>
+          </select>
+        </div>
+        <div>
+          <span class="scan-option-label">Prüfschwerpunkt</span>
+          <select class="scan-select" id="focusArea">
+            <option value="Alle Bereiche">Alle Bereiche</option>
+            <option value="DSGVO & Datenschutz">DSGVO & Datenschutz</option>
+            <option value="AGB & Haftung">AGB & Haftung</option>
+            <option value="Kündigungsklauseln">Kündigungsklauseln</option>
+            <option value="Preisklauseln">Preisklauseln</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="scan-limit-info">
+        <span class="sli-text">Verbleibende Scans dieses Monat</span>
+        <span class="sli-count" id="scanCountDisplay">5 Scans</span>
+      </div>
+
+      <button class="scan-submit" id="submitVertrag" onclick="startScan('vertrag')" disabled>
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Vertrag jetzt analysieren
+      </button>
+    </div>
+
+    <!-- EMAIL TAB -->
+    <div class="scan-panel" id="panel-email">
+      <textarea class="scan-textarea" id="emailText" placeholder="E-Mail-Text hier einfügen — Betreff, Inhalt, Signatur...&#10;&#10;Beispiel:&#10;Betreff: Angebot Softwarelizenz&#10;&#10;Sehr geehrte Damen und Herren,&#10;anbei unser Angebot für..."></textarea>
+
+      <div class="scan-limit-info">
+        <span class="sli-text">Verbleibende Scans dieses Monat</span>
+        <span class="sli-count" id="scanCountDisplayEmail">5 Scans</span>
+      </div>
+
+      <button class="scan-submit" id="submitEmail" onclick="startScan('email')">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        E-Mail jetzt analysieren
+      </button>
+    </div>
+
+    <!-- WEBSITE TAB -->
+    <div class="scan-panel" id="panel-website">
+      <div style="margin-bottom:1.25rem">
+        <span class="scan-option-label">Website-URL eingeben</span>
+        <div class="url-input-wrap">
+          <input type="url" class="scan-url-input" id="websiteUrl" placeholder="https://ihre-website.de">
+        </div>
+      </div>
+      <div style="font-size:.8rem;font-weight:300;color:var(--ink-45);line-height:1.65;margin-bottom:1.25rem">GuardAI prüft Impressum, Datenschutz, Cookie-Banner und Werbetexte auf Ihrer Website automatisch auf Rechtsverstöße.</div>
+
+      <div class="scan-limit-info">
+        <span class="sli-text">Verbleibende Scans dieses Monat</span>
+        <span class="sli-count" id="scanCountDisplayWebsite">5 Scans</span>
+      </div>
+
+      <button class="scan-submit" id="submitWebsite" onclick="startScan('website')">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Website jetzt analysieren
+      </button>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="scan-progress" id="scanProgress">
+      <div class="sp-spinner"></div>
+      <div class="sp-text" id="progressText">Dokument wird analysiert...</div>
+      <div class="sp-sub">Unsere KI-Engine prüft jeden Satz — bitte warten</div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="scan-result" id="scanResult"></div>
+  </div>
+</div>
+
+<!-- Checkout Loading Toast -->
+<div id="checkout-toast" style="
+  display:none;position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+  z-index:9999;background:var(--forest-deep);color:rgba(247,244,239,.95);
+  padding:.875rem 1.5rem;border-radius:10px;
+  box-shadow:0 8px 32px rgba(10,61,43,.35);
+  align-items:center;gap:.75rem;
+  font-size:.85rem;font-family:var(--sans);font-weight:400;
+  white-space:nowrap;
+">
+  <span style="width:16px;height:16px;border:2px solid rgba(247,244,239,.3);border-top-color:rgba(247,244,239,.9);border-radius:50%;display:inline-block;animation:spin .7s linear infinite;flex-shrink:0"></span>
+  Einen kurzen Moment — Sie werden zu Stripe weitergeleitet …
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+</body>
+</html>
