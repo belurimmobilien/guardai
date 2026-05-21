@@ -561,6 +561,14 @@ function resetScan(){
 }
 
 function showRealResult(data, type){
+  // Falls data ein String ist, parsen
+  if(typeof data === 'string'){
+    try { data = JSON.parse(data); } catch(e){}
+  }
+  // Falls data ein verschachteltes Objekt ist
+  if(data && data.analyse && typeof data.analyse === 'string'){
+    try { data = JSON.parse(data.analyse); } catch(e){}
+  }
   var risiko=data.gesamt_risiko||'NIEDRIG', kritisch=data.kritische_befunde||0, warnungen=data.warnungen||0, hinweise=data.hinweise||0;
   var empfehlung=data.empfehlung||'Keine kritischen Befunde gefunden.';
   var befunde=data.befunde||[];

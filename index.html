@@ -1191,6 +1191,8 @@ function resetScan(){
 }
 
 function showRealResult(data, type){
+  if(typeof data === 'string'){ try { data = JSON.parse(data); } catch(e){} }
+  if(data && data.analyse && typeof data.analyse === 'string'){ try { data = JSON.parse(data.analyse); } catch(e){} }
   var risiko = data.gesamt_risiko || 'NIEDRIG';
   var kritisch = data.kritische_befunde || 0;
   var warnungen = data.warnungen || 0;
