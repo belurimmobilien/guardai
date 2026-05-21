@@ -528,8 +528,8 @@ async function startScan(type){
           contract_type: document.getElementById('contractType').value
         })
       });
-    }).then(function(r){ return r.json(); })
-      .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showRealResult(d,type); })
+    }).then(function(r){ return r.text(); })
+      .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; try{ d=JSON.parse(d); }catch(e){} showRealResult(d,type); })
       .catch(function(){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showDemoResult(type); });
 
   } else {
@@ -537,8 +537,8 @@ async function startScan(type){
     fetch('https://hook.eu1.make.com/evwe8xc981ppofd3pnyu1fyrj1k75ytg',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ file_url:'', text_content: textContent, user_email: userEmail, contract_type: type==='email'?'E-Mail':'Website' })
-    }).then(function(r){ return r.json(); })
-      .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showRealResult(d,type); })
+    }).then(function(r){ return r.text(); })
+      .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; try{ d=JSON.parse(d); }catch(e){} showRealResult(d,type); })
       .catch(function(){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showDemoResult(type); });
   }
 }

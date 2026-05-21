@@ -1082,10 +1082,11 @@ function startScan(type){
         })
       });
     })
-    .then(function(r){ return r.json(); })
+    .then(function(r){ return r.text(); })
     .then(function(data){
       clearInterval(interval);
       document.getElementById('scanProgress').style.display='none';
+      try { data = JSON.parse(data); } catch(e){}
       showRealResult(data, type);
     })
     .catch(function(){ 
@@ -1105,10 +1106,11 @@ function startScan(type){
         contract_type: type === 'email' ? 'E-Mail' : 'Website'
       })
     })
-    .then(function(r){ return r.json(); })
+    .then(function(r){ return r.text(); })
     .then(function(data){
       clearInterval(interval);
       document.getElementById('scanProgress').style.display='none';
+      try { data = JSON.parse(data); } catch(e){}
       showRealResult(data, type);
     })
     .catch(function(){
