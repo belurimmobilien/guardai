@@ -483,7 +483,16 @@ function startScan(type){
   var i = 0;
   var iv = setInterval(function(){ if(i<msgs.length){ document.getElementById('progressText').textContent=msgs[i]; i++; } }, 1800);
 
-  var userEmail = _member ? _member.auth.email : 'test@guardai.cloud';
+  // E-Mail immer frisch aus Memberstack holen
+  var userEmail = 'test@guardai.cloud';
+  if(_member && _member.auth && _member.auth.email){
+    userEmail = _member.auth.email;
+  } else if(window.$memberstackDom){
+    try {
+      var ms = window.$memberstackDom.getMemberCookie();
+      if(ms && ms.email) userEmail = ms.email;
+    } catch(e){}
+  }
 
   if(type==='vertrag' && selectedFile){
     // Schritt 1: Datei zu Uploadcare hochladen
