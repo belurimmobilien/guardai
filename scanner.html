@@ -468,7 +468,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 // ── Scan ────────────────────────────────────────────────
-function startScan(type){
+async function startScan(type){
   var valid = false;
   if(type==='vertrag' && selectedFile) valid = true;
   if(type==='email' && document.getElementById('emailText').value.trim().length > 20) valid = true;
@@ -487,11 +487,18 @@ function startScan(type){
   var userEmail = 'test@guardai.cloud';
   if(_member && _member.auth && _member.auth.email){
     userEmail = _member.auth.email;
-  } else if(window.$memberstackDom){
-    try {
-      var ms = window.$memberstackDom.getMemberCookie();
-      if(ms && ms.email) userEmail = ms.email;
-    } catch(e){}
+  }
+  
+  // Trotzdem nochmal frisch prüfen
+  if(userEmail === 'test@guardai.cloud' && window.$memberstackDom){
+    window.$memberstackDom.getCurrentMember().then(function(res){
+      if(res && res.data && res.data.auth && res.data.auth.email){
+        userEmail = res.data.auth.email;
+        _member = res.data;
+      }
+    });
+    // Kurz warten damit getCurrentMember Zeit hat
+    await new Promise(resolve => setTimeout(resolve, 500));
   }
 
   if(type==='vertrag' && selectedFile){
