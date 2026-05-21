@@ -486,25 +486,40 @@ function startScan(type){
   var userEmail = _member ? _member.auth.email : 'test@guardai.cloud';
 
   if(type==='vertrag' && selectedFile){
-    var reader = new FileReader();
-    reader.onload = function(e){
-      fetch('https://oknmpnsihmmoapnwlksj.supabase.co/functions/v1/bright-action',{
-        method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rbm1wbnNpaG1tb2Fwbndsa3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNTM2ODksImV4cCI6MjA5NDkyOTY4OX0.CUno_oO7UE9_H1dLxBxOb8FhkRIotUnXXgk3gL9dqjE'},
+    // Schritt 1: Datei zu Uploadcare hochladen
+    document.getElementById('progressText').textContent = 'Dokument wird hochgeladen...';
+    var formData = new FormData();
+    formData.append('UPLOADCARE_PUB_KEY', 'f24e723fd4719a30499d');
+    formData.append('UPLOADCARE_STORE', '0'); // nicht dauerhaft speichern
+    formData.append('file', selectedFile);
+
+    fetch('https://upload.uploadcare.com/base/', {
+      method: 'POST',
+      body: formData
+    }).then(function(r){ return r.json(); })
+    .then(function(uploadResult){
+      var fileUrl = 'https://ucarecdn.com/' + uploadResult.file + '/';
+      document.getElementById('progressText').textContent = 'KI-Engine analysiert Klauseln...';
+
+      // Schritt 2: URL an Make.com schicken
+      return fetch('https://hook.eu1.make.com/evwe8xc981ppofd3pnyu1fyrj1k75ytg', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          file_base64: e.target.result.split(',')[1],
+          file_url: fileUrl,
           file_name: selectedFile.name,
           user_email: userEmail,
           contract_type: document.getElementById('contractType').value
         })
-      }).then(function(r){ return r.json(); })
-        .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showRealResult(d,type); })
-        .catch(function(){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showDemoResult(type); });
-    };
-    reader.readAsDataURL(selectedFile);
+      });
+    }).then(function(r){ return r.json(); })
+      .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showRealResult(d,type); })
+      .catch(function(){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showDemoResult(type); });
+
   } else {
     var textContent = type==='email' ? document.getElementById('emailText').value : 'Website: '+document.getElementById('websiteUrl').value;
-    fetch('https://oknmpnsihmmoapnwlksj.supabase.co/functions/v1/bright-action',{
-      method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rbm1wbnNpaG1tb2Fwbndsa3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNTM2ODksImV4cCI6MjA5NDkyOTY4OX0.CUno_oO7UE9_H1dLxBxOb8FhkRIotUnXXgk3gL9dqjE'},
+    fetch('https://hook.eu1.make.com/evwe8xc981ppofd3pnyu1fyrj1k75ytg',{
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ file_url:'', text_content: textContent, user_email: userEmail, contract_type: type==='email'?'E-Mail':'Website' })
     }).then(function(r){ return r.json(); })
       .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showRealResult(d,type); })
