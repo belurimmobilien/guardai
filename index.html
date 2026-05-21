@@ -1064,7 +1064,7 @@ function startScan(type){
     var reader = new FileReader();
     reader.onload = function(e){
       var base64 = e.target.result;
-      fetch('/.netlify/functions/scan', {
+      fetch('https://oknmpnsihmmoapnwlksj.supabase.co/functions/v1/bright-action', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -1088,7 +1088,7 @@ function startScan(type){
     reader.readAsDataURL(selectedFile);
   } else {
     var textContent = type === 'email' ? document.getElementById('emailText').value : 'Website: ' + document.getElementById('websiteUrl').value;
-    fetch('/.netlify/functions/scan', {
+    fetch('https://oknmpnsihmmoapnwlksj.supabase.co/functions/v1/bright-action', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({

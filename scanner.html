@@ -488,7 +488,7 @@ function startScan(type){
   if(type==='vertrag' && selectedFile){
     var reader = new FileReader();
     reader.onload = function(e){
-      fetch('/.netlify/functions/scan',{
+      fetch('https://oknmpnsihmmoapnwlksj.supabase.co/functions/v1/bright-action',{
         method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({
           file_base64: e.target.result.split(',')[1],
@@ -503,7 +503,7 @@ function startScan(type){
     reader.readAsDataURL(selectedFile);
   } else {
     var textContent = type==='email' ? document.getElementById('emailText').value : 'Website: '+document.getElementById('websiteUrl').value;
-    fetch('/.netlify/functions/scan',{
+    fetch('https://oknmpnsihmmoapnwlksj.supabase.co/functions/v1/bright-action',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ file_url:'', text_content: textContent, user_email: userEmail, contract_type: type==='email'?'E-Mail':'Website' })
     }).then(function(r){ return r.json(); })
