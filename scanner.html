@@ -529,7 +529,7 @@ async function startScan(type){
         })
       });
     }).then(function(r){ return r.text(); })
-      .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; try{ d=JSON.parse(d); }catch(e){} showRealResult(d,type); })
+      .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; try{ d=JSON.parse(d.replace(/[\r\n]/g,' ')); }catch(e){} showRealResult(d,type); })
       .catch(function(){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showDemoResult(type); });
 
   } else {
@@ -538,7 +538,7 @@ async function startScan(type){
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ file_url:'', text_content: textContent, user_email: userEmail, contract_type: type==='email'?'E-Mail':'Website' })
     }).then(function(r){ return r.text(); })
-      .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; try{ d=JSON.parse(d); }catch(e){} showRealResult(d,type); })
+      .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; try{ d=JSON.parse(d.replace(/[\r\n]/g,' ')); }catch(e){} showRealResult(d,type); })
       .catch(function(){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showDemoResult(type); });
   }
 }
@@ -561,11 +561,9 @@ function resetScan(){
 }
 
 function showRealResult(data, type){
-  // Falls data ein String ist, parsen
   if(typeof data === 'string'){
-    try { data = JSON.parse(data); } catch(e){}
+    try { data = JSON.parse(data.replace(/[\r\n]/g,' ').replace(/\s+/g,' ')); } catch(e){}
   }
-  // Falls data ein verschachteltes Objekt ist
   if(data && data.analyse && typeof data.analyse === 'string'){
     try { data = JSON.parse(data.analyse); } catch(e){}
   }
