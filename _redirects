@@ -1,4 +1,3 @@
 /scanner    /scanner.html    200
 /scanner/   /scanner.html    200
-/.netlify/functions/*  /.netlify/functions/:splat  200
 /*          /index.html      200
