@@ -406,15 +406,33 @@ function setupScanner(member){
   document.getElementById('nav-profil-btn').style.display = 'inline-block';
   document.getElementById('nav-logout-btn').style.display = 'inline-block';
 
-  // Plan-basierte Scan-Limits anzeigen
   var isBusiness = member.planConnections && member.planConnections.some(function(p){
     return p.planId === 'pln_guardai-business--9gro035h';
   });
-  var limitText = isBusiness ? 'Unbegrenzt' : '5 Scans';
-  ['scanCountDisplay','scanCountDisplayEmail','scanCountDisplayWebsite'].forEach(function(id){
-    var el = document.getElementById(id);
-    if(el) el.textContent = limitText;
-  });
+
+  if(isBusiness){
+    ['scanCountDisplay','scanCountDisplayEmail','scanCountDisplayWebsite'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.textContent = 'Unbegrenzt';
+    });
+  } else {
+    // Echten Zähler aus Memberstack JSON laden
+    window.$memberstackDom.getMemberJSON().then(function(rowData){
+      var currentMonth = new Date().getFullYear() + '-' + (new Date().getMonth()+1);
+      var scanData = rowData && rowData.data && rowData.data.scans ? rowData.data.scans : {count: 0, month: currentMonth};
+      if(scanData.month !== currentMonth) scanData = {count: 0, month: currentMonth};
+      var remaining = Math.max(0, 5 - scanData.count);
+      ['scanCountDisplay','scanCountDisplayEmail','scanCountDisplayWebsite'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el) el.textContent = remaining + ' Scans';
+      });
+    }).catch(function(){
+      ['scanCountDisplay','scanCountDisplayEmail','scanCountDisplayWebsite'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el) el.textContent = '5 Scans';
+      });
+    });
+  }
 
   // Upgrade-Banner für Free-Nutzer (nur einmal einfügen)
   if(!isBusiness && !document.getElementById('upgrade-banner')){
@@ -469,6 +487,41 @@ document.addEventListener('DOMContentLoaded', function(){
 
 // ── Scan ────────────────────────────────────────────────
 async function startScan(type){
+  // Scan-Limit prüfen für Free-Nutzer
+  if(_member){
+    var isBusiness = _member.planConnections && _member.planConnections.some(function(p){
+      return p.planId === 'pln_guardai-business--9gro035h';
+    });
+
+    if(!isBusiness){
+      try {
+        var currentMonth = new Date().getFullYear() + '-' + (new Date().getMonth()+1);
+        var rowData = await window.$memberstackDom.getMemberJSON();
+        var scanData = rowData && rowData.data && rowData.data.scans ? rowData.data.scans : {count: 0, month: currentMonth};
+
+        // Reset wenn neuer Monat
+        if(scanData.month !== currentMonth){
+          scanData = {count: 0, month: currentMonth};
+        }
+
+        if(scanData.count >= 5){
+          alert('Sie haben Ihr monatliches Scan-Limit von 5 Scans erreicht. Upgraden Sie auf Business für unbegrenzte Scans.');
+          return;
+        }
+
+        // Zähler erhöhen
+        scanData.count += 1;
+        await window.$memberstackDom.updateMemberJSON({
+          json: Object.assign({}, rowData && rowData.data ? rowData.data : {}, {scans: scanData})
+        });
+
+        // Anzeige updaten
+        var displays = document.querySelectorAll('#scanCountDisplay, #scanCountDisplayEmail, #scanCountDisplayWebsite');
+        displays.forEach(function(el){ el.textContent = (5 - scanData.count) + ' Scans'; });
+
+      } catch(e){ console.error('Scan limit check failed:', e); }
+    }
+  }
   var valid = false;
   if(type==='vertrag' && selectedFile) valid = true;
   if(type==='email' && document.getElementById('emailText').value.trim().length > 20) valid = true;
