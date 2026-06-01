@@ -351,6 +351,7 @@ nav{
 <script>
 var selectedFile = null;
 var currentTab = 'vertrag';
+var iv = null;
 var _member = null;
 
 // ── Auth Check ───────────────────────────────────────────
@@ -452,17 +453,25 @@ function setupScanner(member){
 // ── Tab Switching ────────────────────────────────────────
 function switchTab(tab, btn){
   currentTab = tab;
+  // Progress und Result verstecken
+  document.getElementById('scanResult').style.display = 'none';
+  document.getElementById('scanProgress').style.display = 'none';
+  // Alle Tabs deaktivieren
   document.querySelectorAll('.ntab').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
+  // Alle Panels verstecken
   document.querySelectorAll('.scan-panel').forEach(function(p){ 
     p.classList.remove('active'); 
     p.style.display='none'; 
   });
+  // Aktives Panel anzeigen
   var activePanel = document.getElementById('panel-'+tab);
-  activePanel.classList.add('active');
-  activePanel.style.display='block';
-  document.getElementById('scanResult').style.display = 'none';
-  document.getElementById('scanProgress').style.display = 'none';
+  if(activePanel){
+    activePanel.classList.add('active');
+    activePanel.style.display='block';
+  }
+  // Laufenden Scan abbrechen
+  if(typeof iv !== 'undefined') clearInterval(iv);
 }
 
 // ── File Upload ──────────────────────────────────────────
@@ -539,7 +548,7 @@ async function startScan(type){
 
   var msgs = ['Dokument wird gelesen...','KI-Engine analysiert Klauseln...','Rechtsdatenbank wird abgeglichen...','Befunde werden strukturiert...','Report wird erstellt...'];
   var i = 0;
-  var iv = setInterval(function(){ if(i<msgs.length){ document.getElementById('progressText').textContent=msgs[i]; i++; } }, 1800);
+  iv = setInterval(function(){ if(i<msgs.length){ document.getElementById('progressText').textContent=msgs[i]; i++; } }, 1800);
 
   // E-Mail immer frisch aus Memberstack holen
   var userEmail = 'test@guardai.cloud';
