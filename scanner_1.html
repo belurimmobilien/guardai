@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GuardAI Scanner — KI-Compliance-Analyse</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<script data-memberstack-app="app_cmp7gmpdx00q40syeh6245rdn" src="https://static.memberstack.com/scripts/v2/memberstack.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F7F4EF;
+  --cream-b:#EEE9E0;
+  --white:#FDFCFA;
+  --forest-deep:#0A3D2B;
+  --forest:#0F5A3F;
+  --forest-mid:#1A7A56;
+  --forest-lt:#2A9E6E;
+  --forest-pale:#EAF4EE;
+  --forest-pale2:#D4EBE0;
+  --ink:#18181B;
+  --ink-70:#454547;
+  --ink-45:#8A898C;
+  --ink-20:#CCCACC;
+  --ink-15:#DDDADD;
+  --ink-08:#ECEAEC;
+  --amber:#B45309;
+  --amber-pale:#FEF3C7;
+  --red:#B91C1C;
+  --red-pale:#FEF2F2;
+  --sans:'Inter',system-ui,sans-serif;
+  --serif:'Newsreader',Georgia,serif;
+  --mono:'DM Mono',monospace;
+  --radius:10px;
+  --radius-lg:16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:var(--sans);background:var(--cream);color:var(--ink);min-height:100vh}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;height:56px;
+  background:rgba(247,244,239,.92);
+  backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid var(--ink-08);
+  gap:1rem;
+}
+.nav-brand{display:flex;align-items:center;gap:.5rem;text-decoration:none}
+.nav-shield{width:26px;height:26px;background:var(--forest);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.nav-shield svg{width:13px;height:13px;stroke:#fff;stroke-width:2;fill:none}
+.nav-name{font-size:.9rem;font-weight:600;color:var(--ink);letter-spacing:-.02em}
+.nav-name span{color:var(--forest-mid)}
+
+.nav-tabs{display:flex;gap:2px;background:var(--ink-08);border-radius:8px;padding:3px}
+.ntab{font-size:.78rem;font-weight:500;color:var(--ink-45);padding:.35rem .875rem;border-radius:6px;cursor:pointer;transition:all .2s;border:none;background:transparent;display:flex;align-items:center;gap:.35rem}
+.ntab svg{width:12px;height:12px;stroke:currentColor;stroke-width:2;fill:none;flex-shrink:0}
+.ntab.active{background:var(--white);color:var(--forest);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+.nav-right{display:flex;align-items:center;gap:.625rem}
+.nav-back{font-size:.78rem;color:var(--ink-45);text-decoration:none;transition:color .15s}
+.nav-back:hover{color:var(--forest)}
+.nav-profil{font-size:.78rem;font-weight:500;color:var(--forest);background:var(--forest-pale);border:1px solid var(--forest-pale2);padding:.3rem .75rem;border-radius:6px;cursor:pointer;text-decoration:none;transition:all .15s}
+.nav-profil:hover{background:var(--forest-pale2)}
+.nav-logout{font-size:.75rem;color:var(--ink-45);cursor:pointer;transition:color .15s;background:none;border:none;font-family:var(--sans)}
+.nav-logout:hover{color:var(--red)}
+
+/* ── AUTH GATE ── */
+#auth-gate{display:none;min-height:calc(100vh - 56px);align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;text-align:center;padding:2rem}
+
+.gate-icon{width:56px;height:56px;background:var(--forest-pale);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.gate-icon svg{width:26px;height:26px;stroke:var(--forest);stroke-width:1.8;fill:none}
+.gate-title{font-family:var(--serif);font-size:1.6rem;font-weight:300;color:var(--ink);letter-spacing:-.02em}
+.gate-sub{font-size:.88rem;color:var(--ink-45);max-width:320px}
+.gate-btn{display:inline-flex;align-items:center;gap:.5rem;font-size:.88rem;font-weight:600;color:#fff;background:var(--forest);padding:.7rem 1.5rem;border-radius:8px;text-decoration:none;cursor:pointer;border:none;font-family:var(--sans);transition:all .18s}
+.gate-btn:hover{background:var(--forest-mid);transform:translateY(-1px)}
+
+/* ── MAIN CONTENT ── */
+#scanner-content{display:none}
+
+
+.scanner-wrap{max-width:860px;margin:0 auto;padding:2.5rem 5% 6rem}
+.scanner-header{margin-bottom:2rem}
+.scanner-title{font-family:var(--serif);font-size:2rem;font-weight:300;color:var(--ink);letter-spacing:-.02em;margin-bottom:.3rem}
+.scanner-title em{font-style:italic;color:var(--forest-mid)}
+.scanner-sub{font-size:.85rem;font-weight:300;color:var(--ink-45)}
+
+/* Scan panels */
+.scan-panel{display:none}
+.scan-panel.active{display:block}
+
+/* Upload Zone */
+.upload-zone{border:2px dashed var(--ink-20);border-radius:var(--radius-lg);padding:3rem 2rem;text-align:center;cursor:pointer;transition:all .25s;position:relative;background:var(--white)}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--forest-lt);background:var(--forest-pale)}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.uz-icon{width:48px;height:48px;background:var(--forest-pale);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+.uz-icon svg{width:24px;height:24px;stroke:var(--forest);stroke-width:1.8;fill:none}
+.uz-title{font-size:.95rem;font-weight:600;color:var(--ink);margin-bottom:.35rem}
+.uz-sub{font-size:.78rem;font-weight:300;color:var(--ink-45);margin-bottom:1rem}
+.uz-btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.8rem;font-weight:600;color:var(--forest);background:var(--forest-pale);border:1.5px solid var(--forest-pale2);padding:.5rem 1.1rem;border-radius:7px;cursor:pointer;transition:all .15s}
+.uz-btn:hover{background:var(--forest-pale2)}
+.uz-formats{font-family:var(--mono);font-size:.62rem;color:var(--ink-20);margin-top:1rem;letter-spacing:.04em}
+.file-selected{background:var(--forest-pale);border-color:var(--forest-lt);border-style:solid}
+.file-selected .uz-icon{background:var(--forest)}
+.file-selected .uz-icon svg{stroke:#fff}
+
+/* Text input */
+.scan-textarea{width:100%;min-height:200px;padding:1rem;border:1.5px solid var(--ink-15);border-radius:var(--radius-lg);font-family:var(--sans);font-size:.88rem;color:var(--ink);background:var(--white);resize:vertical;outline:none;transition:border-color .15s;line-height:1.65}
+.scan-textarea:focus{border-color:var(--forest-mid)}
+.scan-textarea::placeholder{color:var(--ink-20)}
+
+/* URL input */
+.url-input-wrap{display:flex;gap:.75rem;align-items:center}
+.scan-url-input{flex:1;padding:.75rem 1rem;border:1.5px solid var(--ink-15);border-radius:var(--radius-lg);font-family:var(--sans);font-size:.88rem;color:var(--ink);background:var(--white);outline:none;transition:border-color .15s}
+.scan-url-input:focus{border-color:var(--forest-mid)}
+
+/* Options */
+.scan-options{display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin-top:1.25rem}
+.scan-option-label{font-size:.75rem;font-weight:500;color:var(--ink-70);margin-bottom:.35rem;display:block;letter-spacing:.01em}
+.scan-select{width:100%;padding:.6rem .875rem;border:1.5px solid var(--ink-15);border-radius:8px;font-family:var(--sans);font-size:.85rem;color:var(--ink);background:var(--white);outline:none;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238A898C' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .75rem center}
+.scan-select:focus{border-color:var(--forest-mid)}
+
+/* Limit info */
+.scan-limit-info{display:flex;align-items:center;justify-content:space-between;background:var(--forest-pale);border:1px solid var(--forest-pale2);border-radius:8px;padding:.6rem 1rem;margin-top:1rem}
+.sli-text{font-size:.75rem;color:var(--forest);font-weight:500}
+.sli-count{font-family:var(--mono);font-size:.75rem;color:var(--forest-mid);font-weight:500}
+
+/* Submit button */
+.scan-submit{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;margin-top:1.5rem;padding:.875rem;font-family:var(--sans);font-size:.92rem;font-weight:600;color:#fff;background:var(--forest);border:none;border-radius:10px;cursor:pointer;transition:all .2s;letter-spacing:-.01em}
+.scan-submit:hover{background:var(--forest-mid);transform:translateY(-1px);box-shadow:0 4px 16px rgba(10,61,43,.2)}
+.scan-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.scan-submit svg{width:16px;height:16px}
+
+/* Progress */
+.scan-progress{display:none;text-align:center;padding:3rem 2rem}
+.sp-spinner{width:48px;height:48px;border:3px solid var(--forest-pale);border-top-color:var(--forest);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1.25rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sp-text{font-size:.95rem;font-weight:500;color:var(--ink);margin-bottom:.35rem}
+.sp-sub{font-size:.8rem;color:var(--ink-45)}
+
+/* Result */
+.scan-result{display:none;margin-top:1.5rem}
+.result-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-radius:var(--radius-lg) var(--radius-lg) 0 0;margin-bottom:1px}
+.rh-kritisch{background:var(--red-pale);border:1px solid rgba(185,28,28,.15)}
+.rh-warnung{background:var(--amber-pale);border:1px solid rgba(180,83,9,.15)}
+.rh-niedrig{background:var(--forest-pale);border:1px solid var(--forest-pale2)}
+.rh-left{display:flex;align-items:center;gap:.75rem}
+.rh-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.ri-kritisch{background:rgba(185,28,28,.15);color:var(--red)}
+.ri-warnung{background:rgba(180,83,9,.12);color:var(--amber)}
+.ri-niedrig{background:rgba(10,61,43,.1);color:var(--forest)}
+.rh-title{font-size:1rem;font-weight:600;color:var(--ink)}
+.rh-sub{font-size:.75rem;color:var(--ink-45);margin-top:1px}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ink-08);margin-bottom:1px}
+.rs-stat{background:var(--white);padding:.875rem;text-align:center}
+.rs-val{font-family:var(--mono);font-size:1.4rem;font-weight:400}
+.rsv-r{color:var(--red)}.rsv-a{color:var(--amber)}.rsv-g{color:var(--forest)}
+.rs-lbl{font-size:.62rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-45);margin-top:2px}
+.result-body{background:var(--white);border:1px solid var(--ink-08);border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:1.5rem}
+.result-empfehlung{font-size:.85rem;font-weight:400;color:var(--ink-70);line-height:1.7;margin-bottom:1.5rem;padding:.875rem 1rem;background:var(--forest-pale);border-radius:8px;border-left:3px solid var(--forest-mid)}
+.result-befunde{list-style:none}
+.befund-item{padding:1rem;border:1px solid var(--ink-08);border-radius:10px;margin-bottom:.75rem;background:var(--cream)}
+.befund-item:last-child{margin-bottom:0}
+.bi-head{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.5rem}
+.bi-badge{font-family:var(--mono);font-size:.58rem;padding:2px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;font-weight:500}
+.bib-r{background:var(--red-pale);color:var(--red)}
+.bib-a{background:var(--amber-pale);color:var(--amber)}
+.bib-h{background:var(--forest-pale);color:var(--forest)}
+.bi-problem{font-size:.85rem;font-weight:500;color:var(--ink);flex:1;line-height:1.45}
+.bi-klausel{font-family:var(--mono);font-size:.72rem;color:var(--ink-45);margin-bottom:.5rem;font-style:italic}
+.bi-norm{font-size:.72rem;color:var(--forest);font-weight:500;margin-bottom:.35rem}
+.bi-empfehlung{font-size:.78rem;color:var(--ink-70);line-height:1.6}
+.result-disclaimer{font-family:var(--mono);font-size:.62rem;color:var(--ink-20);margin-top:1.25rem;line-height:1.6;letter-spacing:.02em}
+.result-new-scan{display:flex;align-items:center;gap:.5rem;font-size:.82rem;font-weight:600;color:var(--forest);background:transparent;border:1.5px solid var(--forest-pale2);padding:.6rem 1.25rem;border-radius:8px;cursor:pointer;margin-top:1rem;transition:all .15s;font-family:var(--sans)}
+.result-new-scan:hover{background:var(--forest-pale)}
+
+/* Upgrade banner */
+.upgrade-banner{background:var(--forest-deep);color:rgba(247,244,239,.9);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-top:1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.ub-text{font-size:.85rem;line-height:1.5}
+.ub-text strong{font-weight:600;color:#fff}
+.ub-btn{font-size:.8rem;font-weight:600;color:var(--forest-deep);background:var(--cream);padding:.5rem 1.1rem;border-radius:7px;text-decoration:none;white-space:nowrap;transition:all .15s;cursor:pointer;border:none;font-family:var(--sans)}
+.ub-btn:hover{background:#fff}
+
+@media(max-width:600px){
+  .scan-options{grid-template-columns:1fr}
+  .nav-tabs{display:none}
+  .nav-tabs-mobile{display:flex}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-brand">
+    <div class="nav-shield">
+      <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7L12 2z"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <span class="nav-name">Guard<span>AI</span></span>
+  </a>
+
+  <div class="nav-tabs" id="navTabs">
+    <button class="ntab active" onclick="switchTab('vertrag',this)">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Vertrag
+    </button>
+    <button class="ntab" onclick="switchTab('email',this)">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      E-Mail
+    </button>
+    <button class="ntab" onclick="switchTab('website',this)">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Website
+    </button>
+  </div>
+
+  <div class="nav-right">
+    <a href="/" class="nav-back">← Zurück</a>
+    <a href="#" class="nav-profil" id="nav-profil-btn" style="display:none" onclick="openProfile()">Mein Profil</a>
+    <button class="nav-logout" id="nav-logout-btn" data-ms-action="logout" style="display:none">Abmelden</button>
+  </div>
+</nav>
+
+<!-- AUTH GATE: nur für nicht eingeloggte -->
+<div id="auth-gate" data-ms-content="!members">
+  <div class="gate-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7L12 2z"/></svg>
+  </div>
+  <div class="gate-title">Bitte zuerst anmelden</div>
+  <div class="gate-sub">Der GuardAI Scanner steht nur registrierten Nutzern zur Verfügung.</div>
+  <button class="gate-btn" onclick="window.$memberstackDom.openModal('LOGIN')">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+    Jetzt anmelden
+  </button>
+  <a href="/" style="font-size:.8rem;color:var(--ink-45);text-decoration:none">Zurück zur Startseite →</a>
+</div>
+
+<!-- SCANNER CONTENT: nur für eingeloggte -->
+<div id="scanner-content" data-ms-content="members">
+  <div class="scanner-wrap">
+    <div class="scanner-header">
+      <div class="scanner-title">GuardAI <em>Scanner</em></div>
+      <div class="scanner-sub">Dokument hochladen oder Text eingeben — Ergebnis in unter 30 Sekunden.</div>
+    </div>
+
+    <!-- VERTRAG TAB -->
+    <div class="scan-panel active" id="panel-vertrag">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" accept=".pdf,.doc,.docx" style="display:none" onchange="handleFile(this)">
+        <div class="uz-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="uz-title" id="uploadTitle">Vertrag hier ablegen</div>
+        <div class="uz-sub" id="uploadSub">oder Datei auswählen</div>
+        <div class="uz-btn">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Datei auswählen
+        </div>
+        <div class="uz-formats">PDF · DOCX · DOC — max. 10 MB</div>
+      </div>
+
+      <div class="scan-options">
+        <div>
+          <span class="scan-option-label">Vertragstyp</span>
+          <select class="scan-select" id="contractType">
+            <option>Allgemeiner Vertrag</option>
+            <option>SaaS-Nutzungsvertrag B2B</option>
+            <option>Lieferantenvertrag</option>
+            <option>NDA / Geheimhaltungsvertrag</option>
+            <option>Arbeitsvertrag</option>
+            <option>Kaufvertrag B2C</option>
+            <option>Werkvertrag</option>
+            <option>AGB</option>
+          </select>
+        </div>
+        <div>
+          <span class="scan-option-label">Prüfschwerpunkt</span>
+          <select class="scan-select" id="focusArea">
+            <option>Alle Bereiche</option>
+            <option>DSGVO & Datenschutz</option>
+            <option>AGB & Haftung</option>
+            <option>Kündigungsklauseln</option>
+            <option>Preisklauseln</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="scan-limit-info">
+        <span class="sli-text">Verbleibende Scans dieses Monat</span>
+        <span class="sli-count" id="scanCountDisplay">— Scans</span>
+      </div>
+
+      <button class="scan-submit" id="submitVertrag" onclick="startScan('vertrag')" disabled>
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Vertrag jetzt analysieren
+      </button>
+    </div>
+
+    <!-- EMAIL TAB -->
+    <div class="scan-panel" id="panel-email">
+      <textarea class="scan-textarea" id="emailText" placeholder="E-Mail-Text hier einfügen — Betreff, Inhalt, Signatur...&#10;&#10;Beispiel:&#10;Betreff: Angebot Softwarelizenz&#10;&#10;Sehr geehrte Damen und Herren,&#10;anbei unser Angebot für..."></textarea>
+
+      <div class="scan-limit-info">
+        <span class="sli-text">Verbleibende Scans dieses Monat</span>
+        <span class="sli-count" id="scanCountDisplayEmail">— Scans</span>
+      </div>
+
+      <button class="scan-submit" id="submitEmail" onclick="startScan('email')">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        E-Mail jetzt analysieren
+      </button>
+    </div>
+
+    <!-- WEBSITE TAB -->
+    <div class="scan-panel" id="panel-website">
+      <div style="margin-bottom:1.25rem">
+        <span class="scan-option-label">Website-URL eingeben</span>
+        <div class="url-input-wrap">
+          <input type="url" class="scan-url-input" id="websiteUrl" placeholder="https://ihre-website.de">
+        </div>
+      </div>
+      <div style="font-size:.8rem;font-weight:300;color:var(--ink-45);line-height:1.65;margin-bottom:1.25rem">GuardAI prüft Impressum, Datenschutz, Cookie-Banner und Werbetexte auf Ihrer Website automatisch auf Rechtsverstöße.</div>
+
+      <div class="scan-limit-info">
+        <span class="sli-text">Verbleibende Scans dieses Monat</span>
+        <span class="sli-count" id="scanCountDisplayWebsite">— Scans</span>
+      </div>
+
+      <button class="scan-submit" id="submitWebsite" onclick="startScan('website')">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Website jetzt analysieren
+      </button>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="scan-progress" id="scanProgress">
+      <div class="sp-spinner"></div>
+      <div class="sp-text" id="progressText">Dokument wird analysiert...</div>
+      <div class="sp-sub">Unsere KI-Engine prüft jeden Satz — bitte warten</div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="scan-result" id="scanResult"></div>
+  </div>
+</div>
+
+<script>
+var selectedFile = null;
+var currentTab = 'vertrag';
+var iv = null;
+var _member = null;
+
+// ── Auth Check ───────────────────────────────────────────
+// Body sofort verstecken bis Auth-Status klar
+document.body.style.visibility = 'hidden';
+
+document.addEventListener('DOMContentLoaded', function(){
+  function initMs(){
+    window.$memberstackDom.getCurrentMember().then(function(res){
+      var member = res && res.data ? res.data : null;
+      _member = member;
+      if(member){
+        document.getElementById('scanner-content').style.display = 'block';
+        setupScanner(member);
+      } else {
+        document.getElementById('auth-gate').style.display = 'flex';
+      }
+      document.body.style.visibility = '';
+    }).catch(function(){
+      document.getElementById('auth-gate').style.display = 'flex';
+      document.body.style.visibility = '';
+    });
+
+    window.$memberstackDom.onAuthChange(function(member){
+      var m = member && member.data ? member.data : member;
+      if(m){
+        _member = m;
+        document.getElementById('auth-gate').style.display = 'none';
+        document.getElementById('scanner-content').style.display = 'block';
+        document.body.style.visibility = '';
+        setupScanner(m);
+      }
+    });
+  }
+
+  if(typeof window.$memberstackDom !== 'undefined'){
+    initMs();
+  } else {
+    var t = setInterval(function(){
+      if(typeof window.$memberstackDom !== 'undefined'){ clearInterval(t); initMs(); }
+    }, 50);
+    // Fallback nach 5s
+    setTimeout(function(){
+      if(document.body.style.visibility === 'hidden'){
+        document.getElementById('auth-gate').style.display = 'flex';
+        document.body.style.visibility = '';
+      }
+    }, 5000);
+  }
+});
+
+function setupScanner(member){
+  document.getElementById('nav-profil-btn').style.display = 'inline-block';
+  document.getElementById('nav-logout-btn').style.display = 'inline-block';
+
+  var isBusiness = member.planConnections && member.planConnections.some(function(p){
+    return p.planId === 'pln_guardai-business--9gro035h';
+  });
+
+  if(isBusiness){
+    ['scanCountDisplay','scanCountDisplayEmail','scanCountDisplayWebsite'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.textContent = 'Unbegrenzt';
+    });
+  } else {
+    // Echten Zähler aus Memberstack JSON laden
+    window.$memberstackDom.getMemberJSON().then(function(rowData){
+      var currentMonth = new Date().getFullYear() + '-' + (new Date().getMonth()+1);
+      var scanData = rowData && rowData.data && rowData.data.scans ? rowData.data.scans : {count: 0, month: currentMonth};
+      if(scanData.month !== currentMonth) scanData = {count: 0, month: currentMonth};
+      var remaining = Math.max(0, 5 - scanData.count);
+      ['scanCountDisplay','scanCountDisplayEmail','scanCountDisplayWebsite'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el) el.textContent = remaining + ' Scans';
+      });
+    }).catch(function(){
+      ['scanCountDisplay','scanCountDisplayEmail','scanCountDisplayWebsite'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el) el.textContent = '5 Scans';
+      });
+    });
+  }
+
+  // Upgrade-Banner für Free-Nutzer (nur einmal einfügen)
+  if(!isBusiness && !document.getElementById('upgrade-banner')){
+    var banner = '<div id="upgrade-banner" class="upgrade-banner"><div class="ub-text"><strong>Free-Plan:</strong> 5 Scans/Monat — Unbegrenzte Scans mit Business ab € 599/Monat.</div><a href="/" class="ub-btn">Jetzt upgraden →</a></div>';
+    document.querySelector('.scanner-wrap').insertAdjacentHTML('beforeend', banner);
+  }
+
+  // URL-Parameter ?tab= auslesen und richtigen Tab aktivieren
+  var params = new URLSearchParams(window.location.search);
+  var tab = params.get('tab');
+  if(tab && ['vertrag','email','website'].indexOf(tab) !== -1){
+    var tabBtn = document.querySelector('.ntab[onclick*="' + tab + '"]');
+    if(tabBtn) switchTab(tab, tabBtn);
+  }
+}
+
+// ── Tab Switching ────────────────────────────────────────
+function switchTab(tab, btn){
+  currentTab = tab;
+  // Progress und Result verstecken
+  document.getElementById('scanResult').style.display = 'none';
+  document.getElementById('scanProgress').style.display = 'none';
+  // Alle Tabs deaktivieren
+  document.querySelectorAll('.ntab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  // Alle Panels verstecken
+  document.querySelectorAll('.scan-panel').forEach(function(p){ 
+    p.classList.remove('active'); 
+    p.style.display='none'; 
+  });
+  // Aktives Panel anzeigen
+  var activePanel = document.getElementById('panel-'+tab);
+  if(activePanel){
+    activePanel.classList.add('active');
+    activePanel.style.display='block';
+  }
+  // Laufenden Scan abbrechen
+  if(typeof iv !== 'undefined') clearInterval(iv);
+}
+
+// ── File Upload ──────────────────────────────────────────
+function handleFile(input){
+  if(input.files && input.files[0]){
+    selectedFile = input.files[0];
+    document.getElementById('uploadTitle').textContent = selectedFile.name;
+    document.getElementById('uploadSub').textContent = (selectedFile.size/1024/1024).toFixed(2)+' MB';
+    document.getElementById('uploadZone').classList.add('file-selected');
+    document.getElementById('submitVertrag').disabled = false;
+  }
+}
+
+// Drag & Drop
+document.addEventListener('DOMContentLoaded', function(){
+  var zone = document.getElementById('uploadZone');
+  if(!zone) return;
+  zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', function(){ zone.classList.remove('dragover'); });
+  zone.addEventListener('drop', function(e){
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    var f = e.dataTransfer.files[0];
+    if(f){ var fi = document.getElementById('fileInput'); fi.files = e.dataTransfer.files; handleFile(fi); }
+  });
+});
+
+// ── Scan ────────────────────────────────────────────────
+async function startScan(type){
+  // Scan-Limit prüfen für Free-Nutzer
+  if(_member){
+    var isBusiness = _member.planConnections && _member.planConnections.some(function(p){
+      return p.planId === 'pln_guardai-business--9gro035h';
+    });
+
+    if(!isBusiness){
+      try {
+        var currentMonth = new Date().getFullYear() + '-' + (new Date().getMonth()+1);
+        var rowData = await window.$memberstackDom.getMemberJSON();
+        var scanData = rowData && rowData.data && rowData.data.scans ? rowData.data.scans : {count: 0, month: currentMonth};
+
+        // Reset wenn neuer Monat
+        if(scanData.month !== currentMonth){
+          scanData = {count: 0, month: currentMonth};
+        }
+
+        if(scanData.count >= 5){
+          alert('Sie haben Ihr monatliches Scan-Limit von 5 Scans erreicht. Upgraden Sie auf Business für unbegrenzte Scans.');
+          return;
+        }
+
+        // Zähler erhöhen
+        scanData.count += 1;
+        await window.$memberstackDom.updateMemberJSON({
+          json: Object.assign({}, rowData && rowData.data ? rowData.data : {}, {scans: scanData})
+        });
+
+        // Anzeige updaten
+        var displays = document.querySelectorAll('#scanCountDisplay, #scanCountDisplayEmail, #scanCountDisplayWebsite');
+        displays.forEach(function(el){ el.textContent = (5 - scanData.count) + ' Scans'; });
+
+      } catch(e){ console.error('Scan limit check failed:', e); }
+    }
+  }
+  var valid = false;
+  if(type==='vertrag' && selectedFile) valid = true;
+  if(type==='email' && document.getElementById('emailText').value.trim().length > 20) valid = true;
+  if(type==='website'){ var url = document.getElementById('websiteUrl').value.trim(); valid = url.startsWith('http'); }
+  if(!valid){ alert('Bitte Inhalt eingeben bevor Sie den Scan starten.'); return; }
+
+  document.querySelectorAll('.scan-panel').forEach(function(p){ p.classList.remove('active'); p.style.display='none'; });
+  document.getElementById('scanProgress').style.display = 'block';
+  document.getElementById('scanResult').style.display = 'none';
+
+  var msgs = ['Dokument wird gelesen...','KI-Engine analysiert Klauseln...','Rechtsdatenbank wird abgeglichen...','Befunde werden strukturiert...','Report wird erstellt...'];
+  var i = 0;
+  iv = setInterval(function(){ if(i<msgs.length){ document.getElementById('progressText').textContent=msgs[i]; i++; } }, 1800);
+
+  // E-Mail immer frisch aus Memberstack holen
+  var userEmail = 'test@guardai.cloud';
+  if(_member && _member.auth && _member.auth.email){
+    userEmail = _member.auth.email;
+  }
+  
+  // Trotzdem nochmal frisch prüfen
+  if(userEmail === 'test@guardai.cloud' && window.$memberstackDom){
+    window.$memberstackDom.getCurrentMember().then(function(res){
+      if(res && res.data && res.data.auth && res.data.auth.email){
+        userEmail = res.data.auth.email;
+        _member = res.data;
+      }
+    });
+    // Kurz warten damit getCurrentMember Zeit hat
+    await new Promise(resolve => setTimeout(resolve, 500));
+  }
+
+  if(type==='vertrag' && selectedFile){
+    // Schritt 1: Datei zu Uploadcare hochladen
+    document.getElementById('progressText').textContent = 'Dokument wird hochgeladen...';
+    var formData = new FormData();
+    formData.append('UPLOADCARE_PUB_KEY', 'f24e723fd4719a30499d');
+    formData.append('UPLOADCARE_STORE', '0'); // nicht dauerhaft speichern
+    formData.append('file', selectedFile);
+
+    fetch('https://upload.uploadcare.com/base/', {
+      method: 'POST',
+      body: formData
+    }).then(function(r){ return r.json(); })
+    .then(function(uploadResult){
+      var fileUrl = 'https://ucarecdn.com/' + uploadResult.file + '/';
+      document.getElementById('progressText').textContent = 'KI-Engine analysiert Klauseln...';
+
+      // Schritt 2: URL an Make.com schicken
+      return fetch('https://hook.eu1.make.com/evwe8xc981ppofd3pnyu1fyrj1k75ytg', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          file_url: fileUrl,
+          file_name: selectedFile.name,
+          user_email: userEmail,
+          contract_type: document.getElementById('contractType').value
+        })
+      });
+    }).then(function(r){ return r.text(); })
+      .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; try{ d=JSON.parse(d.replace(/[\r\n]/g,' ')); }catch(e){} showRealResult(d,type); })
+      .catch(function(){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showDemoResult(type); });
+
+  } else {
+    var textContent = type==='email' ? document.getElementById('emailText').value : 'Website: '+document.getElementById('websiteUrl').value;
+    fetch('https://hook.eu1.make.com/evwe8xc981ppofd3pnyu1fyrj1k75ytg',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ file_url:'', text_content: textContent, user_email: userEmail, contract_type: type==='email'?'E-Mail':'Website' })
+    }).then(function(r){ return r.text(); })
+      .then(function(d){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; try{ d=JSON.parse(d.replace(/[\r\n]/g,' ')); }catch(e){} showRealResult(d,type); })
+      .catch(function(){ clearInterval(iv); document.getElementById('scanProgress').style.display='none'; showDemoResult(type); });
+  }
+}
+
+function resetScan(){
+  selectedFile = null;
+  document.getElementById('fileInput').value='';
+  document.getElementById('uploadTitle').textContent='Vertrag hier ablegen';
+  document.getElementById('uploadSub').textContent='oder Datei auswählen';
+  document.getElementById('uploadZone').classList.remove('file-selected');
+  document.getElementById('submitVertrag').disabled=true;
+  document.getElementById('emailText').value='';
+  document.getElementById('websiteUrl').value='';
+  document.getElementById('scanResult').style.display='none';
+  document.getElementById('scanProgress').style.display='none';
+  document.querySelectorAll('.scan-panel').forEach(function(p){ p.classList.remove('active'); p.style.display='none'; });
+  var vertragPanel = document.getElementById('panel-vertrag');
+  vertragPanel.classList.add('active');
+  vertragPanel.style.display='block';
+  document.querySelectorAll('.ntab').forEach(function(b,i){ b.classList.toggle('active',i===0); });
+  currentTab='vertrag';
+}
+
+function showRealResult(data, type){
+  if(typeof data === 'string'){
+    try { data = JSON.parse(data.replace(/[\r\n]/g,' ').replace(/\s+/g,' ')); } catch(e){}
+  }
+  if(data && data.analyse && typeof data.analyse === 'string'){
+    try { data = JSON.parse(data.analyse); } catch(e){}
+  }
+  var risiko=data.gesamt_risiko||'NIEDRIG', kritisch=data.kritische_befunde||0, warnungen=data.warnungen||0, hinweise=data.hinweise||0;
+  var empfehlung=data.empfehlung||'Keine kritischen Befunde gefunden.';
+  var befunde=data.befunde||[];
+  var riskClass=risiko==='KRITISCH'?'kritisch':risiko==='WARNUNG'?'warnung':'niedrig';
+  var riskIcon=risiko==='KRITISCH'?'⚠':risiko==='WARNUNG'?'!':'✓';
+  var befundeHTML=befunde.map(function(b){ var bc=b.schweregrad==='KRITISCH'?'r':b.schweregrad==='WARNUNG'?'a':'h'; return '<li class="befund-item"><div class="bi-head"><span class="bi-badge bib-'+bc+'">'+b.schweregrad+'</span><span class="bi-problem">'+(b.problem||'')+'</span></div><div class="bi-klausel">'+(b.rechtsgrundlage||'')+'</div><div class="bi-empfehlung">→ '+(b.empfehlung||'')+'</div></li>'; }).join('');
+  renderResult(riskClass,riskIcon,risiko,kritisch,warnungen,hinweise,empfehlung,befundeHTML);
+}
+
+function showDemoResult(type){
+  var r={vertrag:{risiko:'WARNUNG',kritisch:1,warnungen:2,hinweise:1,empfehlung:'Es wurden 1 kritischer Befund und 2 Warnungen identifiziert. Bitte lassen Sie die markierten Klauseln durch einen Rechtsanwalt prüfen.',befunde:[{schwere:'KRITISCH',problem:'Haftungsausschluss für Vorsatz — unwirksam nach § 276 BGB',klausel:'...schließt jede Haftung aus, einschließlich Vorsatz...',norm:'§ 276 Abs. 3 BGB',empfehlung:'Haftungsausschluss auf grobe Fahrlässigkeit begrenzen.'},{schwere:'WARNUNG',problem:'Einseitige Preisänderungsklausel ohne sachlichen Grund',klausel:'...behält sich das Recht vor, Preise jederzeit anzupassen...',norm:'§ 307 Abs. 1 BGB',empfehlung:'Preisänderungen auf sachliche Gründe beschränken.'}]},email:{risiko:'NIEDRIG',kritisch:0,warnungen:1,hinweise:1,empfehlung:'Die E-Mail enthält eine Warnung bezüglich der Pflichtangaben.',befunde:[{schwere:'WARNUNG',problem:'Pflichtangaben in der E-Mail-Signatur unvollständig',klausel:'Signatur enthält keine Rechtsform',norm:'§ 5 TMG',empfehlung:'Ergänzen Sie Rechtsform und Handelsregisternummer.'}]},website:{risiko:'NIEDRIG',kritisch:0,warnungen:1,hinweise:2,empfehlung:'Ihre Website ist weitgehend konform.',befunde:[{schwere:'WARNUNG',problem:'Cookie-Banner ohne aktives Opt-in',klausel:'\"Durch die Nutzung stimmen Sie zu\"',norm:'§ 25 TTDSG',empfehlung:'Echten Opt-in Button implementieren.'}]}}[type];
+  var riskClass=r.risiko==='KRITISCH'?'kritisch':r.risiko==='WARNUNG'?'warnung':'niedrig';
+  var riskIcon=r.risiko==='KRITISCH'?'⚠':r.risiko==='WARNUNG'?'!':'✓';
+  var befundeHTML=r.befunde.map(function(b){ var bc=b.schwere==='KRITISCH'?'r':b.schwere==='WARNUNG'?'a':'h'; return '<li class="befund-item"><div class="bi-head"><span class="bi-badge bib-'+bc+'">'+b.schwere+'</span><span class="bi-problem">'+b.problem+'</span></div><div class="bi-klausel">„'+b.klausel+'"</div><div class="bi-norm">'+b.norm+'</div><div class="bi-empfehlung">→ '+b.empfehlung+'</div></li>'; }).join('');
+  renderResult(riskClass,riskIcon,r.risiko,r.kritisch,r.warnungen,r.hinweise,r.empfehlung,befundeHTML);
+}
+
+function renderResult(riskClass,riskIcon,risiko,kritisch,warnungen,hinweise,empfehlung,befundeHTML){
+  document.getElementById('scanResult').innerHTML=
+    '<div class="result-header rh-'+riskClass+'"><div class="rh-left"><div class="ri-'+riskClass+' rh-icon">'+riskIcon+'</div><div><div class="rh-title">Risiko: '+risiko+'</div><div class="rh-sub">Analyse abgeschlossen — '+new Date().toLocaleTimeString('de-DE')+'</div></div></div></div>'+
+    '<div class="result-stats"><div class="rs-stat"><div class="rs-val rsv-r">'+kritisch+'</div><div class="rs-lbl">Kritisch</div></div><div class="rs-stat"><div class="rs-val rsv-a">'+warnungen+'</div><div class="rs-lbl">Warnungen</div></div><div class="rs-stat"><div class="rs-val rsv-g">'+hinweise+'</div><div class="rs-lbl">Hinweise</div></div></div>'+
+    '<div class="result-body"><div class="result-empfehlung">'+empfehlung+'</div><ul class="result-befunde">'+befundeHTML+'</ul><div class="result-disclaimer">⚠ Diese Analyse wurde automatisiert durch GuardAI erstellt und stellt keine Rechtsberatung im Sinne des RDG dar.</div><div style="margin-top:.75rem;font-size:.78rem;color:var(--forest)">✓ PDF-Report wurde an Ihre E-Mail gesendet</div><button class="result-new-scan" onclick="resetScan()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Neuen Scan starten</button></div>';
+  document.getElementById('scanResult').style.display='block';
+  document.getElementById('scanResult').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function openProfile(){
+  // Weiterleitung zur Profilseite oder Overlay in index.html öffnen
+  window.location.href = '/#profil';
+}
+</script>
+</body>
+</html>
