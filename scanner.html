@@ -6,7 +6,7 @@
 <title>GuardAI Scanner — KI-Compliance-Analyse</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/favicon.svg">
-<script data-ms-app="app_cmp7gmpdx00q40syeh6245rdn" src="https://cdn.memberstack.com/scripts/v2/memberstack.js"></script>
+<script data-memberstack-app="app_cmp7gmpdx00q40syeh6245rdn" src="https://static.memberstack.com/scripts/v2/memberstack.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -379,10 +379,12 @@ document.addEventListener('DOMContentLoaded', function(){
       var m = member && member.data ? member.data : member;
       if(m){
         _member = m;
-        document.getElementById('auth-gate').style.display = 'none';
-        document.getElementById('scanner-content').style.display = 'block';
+        var gate = document.getElementById('auth-gate');
+        var content = document.getElementById('scanner-content');
+        if(gate) gate.style.display = 'none';
+        if(content) content.style.display = 'block';
         document.body.style.visibility = '';
-        setupScanner(m);
+        if(content) setupScanner(m);
       }
     });
   }
