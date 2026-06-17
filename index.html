@@ -1000,8 +1000,15 @@ function switchScanTab(tab, btn){
   currentScanType = tab;
   document.querySelectorAll('.snav-tab').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
-  document.querySelectorAll('.scan-panel').forEach(function(p){ p.classList.remove('active'); });
-  document.getElementById('panel-'+tab).classList.add('active');
+  document.querySelectorAll('.scan-panel').forEach(function(p){
+    p.classList.remove('active');
+    p.style.display='none';
+  });
+  var activePanel = document.getElementById('panel-'+tab);
+  if(activePanel){
+    activePanel.classList.add('active');
+    activePanel.style.display='block';
+  }
   document.getElementById('scanResult').style.display='none';
   document.getElementById('scanProgress').style.display='none';
 }
@@ -1187,8 +1194,10 @@ function resetScan(){
   document.getElementById('websiteUrl').value='';
   document.getElementById('scanResult').style.display='none';
   document.getElementById('scanProgress').style.display='none';
-  document.querySelectorAll('.scan-panel').forEach(function(p){ p.style.display=''; });
-  document.getElementById('panel-vertrag').classList.add('active');
+  document.querySelectorAll('.scan-panel').forEach(function(p){ p.classList.remove('active'); p.style.display='none'; });
+  var vertragPanel = document.getElementById('panel-vertrag');
+  vertragPanel.classList.add('active');
+  vertragPanel.style.display='block';
   document.querySelectorAll('.snav-tab').forEach(function(b,i){ b.classList.toggle('active', i===0); });
   currentScanType='vertrag';
 }
