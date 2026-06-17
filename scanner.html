@@ -557,17 +557,16 @@ async function startScan(type){
   if(_member && _member.auth && _member.auth.email){
     userEmail = _member.auth.email;
   }
-  
-  // Trotzdem nochmal frisch prüfen
+
+  // Trotzdem nochmal frisch prüfen — direkt auf das Ergebnis warten statt auf feste Zeitspanne
   if(userEmail === 'test@guardai.cloud' && window.$memberstackDom){
-    window.$memberstackDom.getCurrentMember().then(function(res){
+    try {
+      var res = await window.$memberstackDom.getCurrentMember();
       if(res && res.data && res.data.auth && res.data.auth.email){
         userEmail = res.data.auth.email;
         _member = res.data;
       }
-    });
-    // Kurz warten damit getCurrentMember Zeit hat
-    await new Promise(resolve => setTimeout(resolve, 500));
+    } catch(e){ console.error('getCurrentMember failed:', e); }
   }
 
   if(type==='vertrag' && selectedFile){

@@ -1024,6 +1024,13 @@ function handleFile(input){
   }
 }
 
+function getUserEmailForScan(){
+  if(_currentMember && _currentMember.auth && _currentMember.auth.email){
+    return _currentMember.auth.email;
+  }
+  return 'test@guardai.cloud';
+}
+
 function startScan(type){
   var valid = false;
   if(type==='vertrag' && selectedFile) valid = true;
@@ -1085,7 +1092,7 @@ function startScan(type){
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           file_url: fileUrl,
-          user_email: window.__ms_member ? window.__ms_member.email : 'test@guardai.cloud',
+          user_email: getUserEmailForScan(),
           contract_type: document.getElementById('contractType') ? document.getElementById('contractType').value : 'Vertrag'
         })
       });
@@ -1110,7 +1117,7 @@ function startScan(type){
       body: JSON.stringify({
         file_url: '',
         text_content: textContent,
-        user_email: window.__ms_member ? window.__ms_member.email : 'test@guardai.cloud',
+        user_email: getUserEmailForScan(),
         contract_type: type === 'email' ? 'E-Mail' : 'Website'
       })
     })
